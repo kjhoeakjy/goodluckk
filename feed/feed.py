@@ -36,7 +36,8 @@ N_BASIC = 20
 POOL = 100
 TICK = 30
 SLOTS_KEEP = 12
-MAX_RUN = 5 * 3600 + 40 * 60  # GitHub 작업 6시간 한도 전 종료(다음 예약 실행이 이어받음)
+MAX_RUN = 5 * 3600  # GitHub 작업 6시간 한도 전 종료. 종료 코드 HANDOVER를 받은 작업 단계가 다음 실행을 호출
+HANDOVER = 75
 OPEN_SHIFT = {"20261119": 60}  # 개장 지연일(분)
 KST = dt.timezone(dt.timedelta(hours=9))
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36",
@@ -466,9 +467,12 @@ def run(loop: bool) -> int:
                 return 1
         if not loop:
             return 0
-        if time.time() - t0 > MAX_RUN or not wk or t > cl + dt.timedelta(minutes=5):
+        if not wk or t > cl + dt.timedelta(minutes=5):
             print("[run] 종료")
             return 0
+        if time.time() - t0 > MAX_RUN:
+            print("[run] 작업 시간 한도 · 다음 실행에 인계")
+            return HANDOVER
         if t > op + dt.timedelta(minutes=30) and not today_list:
             print("[run] 오늘 목록 없음(휴장일 등) · 종료")
             return 0

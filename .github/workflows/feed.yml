@@ -14,6 +14,7 @@ on:
     - cron: "*/15 0-6 * * 1-5"
 permissions:
   contents: write
+  actions: write
 concurrency:
   group: feed
   cancel-in-progress: false
@@ -43,4 +44,13 @@ jobs:
           PW_PREMIUM: ${{ secrets.PW_PREMIUM }}
           FEED_OUT: out
           PYTHONUNBUFFERED: "1"
-        run: python feed/feed.py ${{ (github.event_name == 'workflow_dispatch' && inputs.once) && 'once' || 'run' }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          rc=0
+          python feed/feed.py ${{ (github.event_name == 'workflow_dispatch' && inputs.once) && 'once' || 'run' }} || rc=$?
+          if [ "$rc" = "75" ]; then
+            # 작업 시간 한도 도달: 다음 실행을 직접 호출(이 작업 종료 후 시작)
+            for i in 1 2 3; do gh workflow run feed.yml --repo "${{ github.repository }}" --ref main -f once=false && exit 0; sleep 10; done
+            echo "::error::다음 실행 호출 실패"; exit 1
+          fi
+          exit $rc
