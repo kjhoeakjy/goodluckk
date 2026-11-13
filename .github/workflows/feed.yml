@@ -1,0 +1,48 @@
+name: 추천 자료
+run-name: "추천 자료 ${{ github.event_name == 'schedule' && '자동' || '수동' }}"
+on:
+  workflow_dispatch:
+    inputs:
+      once:
+        description: "1회만 발행(장중 반복 없음)"
+        type: boolean
+        default: true
+  schedule:
+    # 평일 07:30 KST 시작(07:50·08:10 예비). 작업 시간 한도 전 종료하면 13:00 이후 예약분이 이어받음
+    - cron: "30 22 * * 0-4"
+    - cron: "50 22 * * 0-4"
+    - cron: "10 23 * * 0-4"
+    - cron: "0,20,40 4 * * 1-5"
+    - cron: "0 5 * * 1-5"
+permissions:
+  contents: write
+concurrency:
+  group: feed
+  cancel-in-progress: false
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q cryptography
+      - name: live 브랜치 받기
+        run: |
+          mkdir -p out && cd out
+          git init -q -b live
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          if git fetch -q --depth=1 origin live 2>/dev/null; then git reset -q --hard FETCH_HEAD; fi
+      - name: 발행
+        env:
+          SRC_PASSWORD: ${{ secrets.SRC_PASSWORD }}
+          SRC_TOKEN: ${{ secrets.SRC_TOKEN }}
+          PW_BASIC: ${{ secrets.PW_BASIC }}
+          PW_PREMIUM: ${{ secrets.PW_PREMIUM }}
+          FEED_OUT: out
+          PYTHONUNBUFFERED: "1"
+        run: python feed/feed.py ${{ (github.event_name == 'workflow_dispatch' && inputs.once) && 'once' || 'run' }}
