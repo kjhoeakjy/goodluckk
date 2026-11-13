@@ -104,7 +104,7 @@ def session(t: dt.datetime) -> tuple[dt.datetime, dt.datetime]:
 
 
 # ---------------------------------------------------------------- 조회
-def http(url: str, headers: dict | None = None, timeout: int = 20, tries: int = 3) -> bytes | None:
+def http(url: str, headers: dict | None = None, timeout: int = 20, tries: int = 3, quiet: bool = False) -> bytes | None:
     h = dict(UA)
     h.update(headers or {})
     for i in range(tries):
@@ -113,7 +113,8 @@ def http(url: str, headers: dict | None = None, timeout: int = 20, tries: int = 
                 return r.read()
         except urllib.error.HTTPError as e:
             if e.code in (400, 401, 403, 404):
-                print(f"[http] {e.code}")
+                if not quiet:
+                    print(f"[http] {e.code}")
                 return None
         except Exception:  # noqa: BLE001
             pass
@@ -136,6 +137,34 @@ def src_file(name: str):
     except Exception as e:  # noqa: BLE001
         print(f"[src] {name} 복호화 실패: {type(e).__name__}")
         return None
+
+
+def plan_order() -> tuple[str, list[dict]] | None:
+    """원본 실시간 자료에서 당일 순위(종목 코드 순서)만 읽음. 반환 (거래일, [{code, name}]). 주문·계좌 항목은 읽지 않음."""
+    pw = os.environ["SRC_PASSWORD"]
+    base = f"https://raw.githubusercontent.com/{SRC_REPO}/live/"
+    top = int((time.time() - 20) // 10)
+    names = [f"t/{k}.json.enc" for k in range(top, top - 9, -1)] + ["live.json.enc"]
+    for name in names:
+        raw = http(base + name, timeout=10, tries=1, quiet=True)
+        if raw is None:
+            continue
+        try:
+            doc = json.loads(dec(json.loads(raw), pw))
+        except Exception:  # noqa: BLE001
+            continue
+        day = doc.get("date")
+        if not day or day != doc.get("target_date"):
+            return None
+        plan = (doc.get("guard") or {}).get("plan") or []
+        items, seen = [], set()
+        for x in plan:
+            c = x.get("code") if isinstance(x, dict) else None
+            if c and c not in seen:
+                seen.add(c)
+                items.append({"code": c, "name": x.get("name")})
+        return day, items
+    return None
 
 
 def _num(s):
@@ -278,17 +307,20 @@ def detail_doc(src: dict, codes: list[str]) -> dict:
     return {"target_date": src.get("target_date"), "gen": src.get("generated_at"), "items": items}
 
 
-def ranking(src: dict, scores: dict | None) -> list[dict]:
-    """점수 순위 상위 POOL: [{code,name,close,ret1}]. 전 종목 점수표(정렬됨)가 같은 기준일이면 사용, 아니면 추천 목록."""
+def ranking(src: dict, scores: dict | None, plan: list[dict] | None = None) -> list[dict]:
+    """순위 상위 POOL: [{code,name,close,ret1}]. 기본은 점수 순위(전 종목 점수표가 같은 기준일이면 사용, 아니면 추천 목록).
+    plan(당일 재선정 순위)이 있으면 그 순서를 앞에 두고 점수 순위에서 중복을 제외한 종목을 이어 붙임."""
     rows = []
     if scores and scores.get("as_of") == src.get("as_of"):
-        for r in scores.get("rows") or []:
-            rows.append({"code": r[0], "name": r[1], "close": r[2], "ret1": r[3]})
-            if len(rows) >= POOL:
-                break
+        rows = [{"code": r[0], "name": r[1], "close": r[2], "ret1": r[3]} for r in scores.get("rows") or []]
     if len(rows) < N_PREMIUM:
         rows = [{"code": u["code"], "name": u["name"], "close": u.get("close"), "ret1": u.get("ret1")} for u in src.get("up") or []]
-    return rows
+    if plan:
+        by = {r["code"]: r for r in rows}
+        head = [by.get(x["code"]) or {"code": x["code"], "name": x.get("name") or x["code"], "close": None, "ret1": None} for x in plan]
+        used = {r["code"] for r in head}
+        rows = head + [r for r in rows if r["code"] not in used]
+    return rows[:POOL]
 
 
 def is_final(src: dict) -> bool:
@@ -296,13 +328,13 @@ def is_final(src: dict) -> bool:
     return g[:8] == src.get("target_date") and g[8:12] >= "0600"
 
 
-def build_lists(src: dict, scores: dict | None, prev_b: dict | None) -> tuple[dict, dict] | None:
-    rank = ranking(src, scores)
+def build_lists(src: dict, scores: dict | None, prev_b: dict | None, plan: list[dict] | None = None) -> tuple[dict, dict] | None:
+    rank = ranking(src, scores, plan)
     if len(rank) < N_BASIC:
         print("[build] 순위 자료 부족")
         return None
     meta = {"target_date": src["target_date"], "as_of": src["as_of"], "gen": src.get("generated_at"),
-            "final": is_final(src), "n_scored": src.get("n_scored")}
+            "final": is_final(src), "n_scored": src.get("n_scored"), "rr": bool(plan)}
     prem = [{**r, "rank": i + 1} for i, r in enumerate(rank[:N_PREMIUM])]
     # 일반: 상위 POOL 중 무작위 N_BASIC(같은 날 다시 발행해도 아직 후보 안에 있는 종목은 유지)
     pool = {r["code"]: r for r in rank[:POOL]}
@@ -362,6 +394,10 @@ class Feed:
         self.qat = None  # 이번 실행에서 받은 시세 시각(없으면 이전 실행이 남긴 값을 그대로 둠)
         self.closed = bool(lb.get("closed"))
         self.static_ok = False
+        self.src = None
+        self.scores = None
+        self.plan: list[dict] = []  # 당일 재선정 순위(없으면 점수 순위)
+        self.plan_day = None
 
     def refresh_source(self) -> bool:
         src = src_file("latest.json.enc")
@@ -371,6 +407,7 @@ class Feed:
         t = now()
         today = ymd(t)
         if src.get("generated_at") == self.gen and self.lists["b"] and self.lists["p"]:
+            self.src = src
             if not self.static_ok:
                 self.write_static(src)  # 실행마다 1회 재기록(이전 실행이 남기지 못한 경우 대비)
             return False
@@ -380,18 +417,47 @@ class Feed:
         if src["target_date"] > today and self.lists["b"] and self.lists["b"].get("target_date", "") >= today:
             print("[src] 다음 거래일 잠정안 · 오늘 목록 유지")
             return False
-        if not is_final(src) and src["target_date"] == today and t.strftime("%H%M") < "0840" and self.lists["b"]:
-            print("[src] 최종안 대기")
-            return False
         scores = src_file("scores.json.enc")
-        built = build_lists(src, scores, self.lists["b"] if (self.lists["b"] or {}).get("target_date") == src["target_date"] else None)
+        plan = self.plan if self.plan_day == src["target_date"] else None
+        built = build_lists(src, scores, self.lists["b"] if (self.lists["b"] or {}).get("target_date") == src["target_date"] else None, plan)
         if not built:
             return False
+        self.src, self.scores = src, scores
         self.lists["b"], self.lists["p"] = built
         self.gen = src.get("generated_at")
         self.quotes, self.qat, self.closed = {}, None, False
         self.write_static(src)
         print(f"[src] 목록 발행 · 기준일 {src['target_date']} · {'최종' if built[0]['final'] else '잠정'}")
+        return True
+
+    def refresh_plan(self) -> bool:
+        """원본의 당일 재선정 순위가 바뀌면 목록을 같은 순서로 다시 구성."""
+        b = self.lists["b"]
+        if not b or not self.lists["p"] or b.get("target_date") != ymd(now()):
+            return False
+        r = plan_order()
+        if not r or r[0] != b["target_date"] or not r[1]:
+            return False
+        codes = [x["code"] for x in r[1]]
+        if self.plan_day == r[0] and codes == [x["code"] for x in self.plan]:
+            return False
+        if self.src is None or self.src.get("target_date") != r[0]:
+            src = src_file("latest.json.enc")
+            if not src or src.get("target_date") != r[0]:
+                return False
+            self.src = src
+        if self.scores is None or self.scores.get("as_of") != self.src.get("as_of"):
+            self.scores = src_file("scores.json.enc")
+        built = build_lists(self.src, self.scores, b, r[1])
+        if not built:
+            return False
+        self.plan, self.plan_day = r[1], r[0]
+        closed = self.closed
+        self.lists["b"], self.lists["p"] = built
+        self.closed = closed
+        self.gen = self.src.get("generated_at")
+        self.write_static(self.src)
+        print(f"[plan] 재선정 순위 반영 · {len(codes)}종목")
         return True
 
     def write_static(self, src: dict) -> None:
@@ -448,6 +514,7 @@ def run(loop: bool) -> int:
     t0 = time.time()
     f.refresh_source()
     last_src = time.time()
+    last_plan = 0.0
     while True:
         t = now()
         op, cl = session(t)
@@ -455,6 +522,11 @@ def run(loop: bool) -> int:
         today_list = (f.lists["b"] or {}).get("target_date") == ymd(t)
         in_sess = wk and op <= t <= cl + dt.timedelta(minutes=2)
         try:
+            # 재선정 순위 확인: 개장 5분 전~30분 후는 매 주기, 그 밖의 장중은 5분 간격
+            near = op - dt.timedelta(minutes=5) <= t <= op + dt.timedelta(minutes=30)
+            if wk and today_list and t >= op - dt.timedelta(minutes=5) and (near or not loop or time.time() - last_plan > 300):
+                last_plan = time.time()
+                f.refresh_plan()
             if (in_sess and today_list) or not loop:
                 f.refresh_quotes()
             if t > cl + dt.timedelta(minutes=2) and f.qat and f.qat[:10] == t.strftime("%Y-%m-%d"):

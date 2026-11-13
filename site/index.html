@@ -16,6 +16,7 @@ h1{font-size:18px;margin:0;font-weight:700;letter-spacing:-.02em}
 .sub{color:var(--mut);font-size:12px}
 .badge{font-size:11px;padding:1px 8px;border-radius:10px;border:1px solid var(--line);color:var(--mut);white-space:nowrap}
 .badge.live{color:#3ddc84;border-color:#3ddc84}
+.badge.final{color:#0b0d10;background:#3ddc84;border-color:#3ddc84;font-weight:700}
 .badge.live::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#3ddc84;margin:0 5px 1px 0;animation:glb 1.2s ease-in-out infinite}
 @keyframes glb{0%,100%{opacity:1}50%{opacity:.25}}
 .tabs{display:flex;gap:2px;flex-wrap:wrap}
@@ -103,7 +104,7 @@ th.l{text-align:left}
 .fun .r.k .bar{background:var(--up)}
 .fun .r .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .fun .r .l{color:var(--mut)}
-.plan td:first-child{color:var(--mut)}.plan td,.plan th{text-align:left;white-space:normal;padding:8px 10px 8px 0}.plan th{color:var(--fg);font-size:12.5px;font-weight:600}
+.plan td:first-child{color:var(--mut);white-space:nowrap}.plan td,.plan th{text-align:left;white-space:normal;padding:8px 10px 8px 0}.plan th{color:var(--fg);font-size:12.5px;font-weight:600}
 .foot{color:var(--dim);font-size:11px;margin-top:30px;line-height:1.6;border-top:1px solid var(--line);padding-top:12px}
 @media(max-width:640px){.wrap{padding:18px 14px 56px}.tabs.top button{padding:9px 10px}.lv td{padding:8px 4px;font-size:12.5px}td,th{padding:6px 4px}.hm{display:none}.lv td.nm small{display:none}.tl{padding-left:66px}.tl:before{left:54px}.tl .t{left:-66px;width:46px;font-size:11.5px}.fun .r{grid-template-columns:118px 1fr 44px}}
 </style>
@@ -144,7 +145,7 @@ th.l{text-align:left}
       <div class="tw"><table class="plan">
         <tr><th></th><th>일반</th><th>프리미엄</th></tr>
         <tr><td>종목 수</td><td>20</td><td>40</td></tr>
-        <tr><td>선정 방식</td><td>점수 상위 100종목 중 무작위</td><td>점수 상위 40종목</td></tr>
+        <tr><td>선정 방식</td><td>순위 상위 100종목 중 무작위</td><td>순위 상위 40종목</td></tr>
         <tr><td>순위 표시</td><td>미제공</td><td>제공</td></tr>
         <tr><td>추천 근거·차트</td><td>미제공</td><td>제공</td></tr>
         <tr><td>장중 현재가</td><td>제공</td><td>제공</td></tr>
@@ -156,6 +157,7 @@ th.l{text-align:left}
       <h2>이용 방법</h2>
       <div class="cards">
         <div class="c"><b>07:45 이후</b><span>당일 추천 목록 확인</span></div>
+        <div class="c"><b>08:58 이후</b><span>최종 순위 확인</span></div>
         <div class="c"><b>09:00~15:30</b><span>현재가·등락률 확인</span></div>
         <div class="c"><b>성능 탭</b><span>과거 검증 결과와 최근 실전 결과 확인</span></div>
       </div>
@@ -186,11 +188,32 @@ th.l{text-align:left}
         <div class="n"><div class="t">전일 16:00</div><div class="h">전일 자료 확정</div><div class="d">일봉·수급·업종 자료 마감</div></div>
         <div class="n k"><div class="t">07:20</div><div class="h">자료 수집</div><div class="d">공시·뉴스·토론방·해외 지표 수집</div></div>
         <div class="n k"><div class="t">07:30</div><div class="h">학습·점수 산출</div><div class="d">모형 재학습 후 전 종목 점수 산출</div></div>
-        <div class="n k"><div class="t">07:45</div><div class="h">추천 발행</div><div class="d">일반·프리미엄 목록 갱신</div></div>
+        <div class="n k"><div class="t">07:45</div><div class="h">오전 순위 발행</div><div class="d">점수 순위 기준 일반·프리미엄 목록 갱신</div></div>
+        <div class="n k"><div class="t">08:58</div><div class="h">순위 재선정</div><div class="d">개장 직전 예상 시가를 반영한 재선정 순위를 상위에 배치</div></div>
         <div class="n"><div class="t">09:00</div><div class="h">장중 시세</div><div class="d">30초 간격 현재가 갱신(15:30 종료)</div></div>
         <div class="n"><div class="t">익영업일</div><div class="h">결과 채점</div><div class="d">전일 추천 결과를 성능 탭에 반영</div></div>
       </div>
       <div class="ev" style="margin-top:12px">개장 시각 변경일(수능일 등)은 장중 일정 동일 시간 순연.</div>
+    </section>
+    <section>
+      <h2>순위 구성</h2>
+      <div class="tw"><table class="plan">
+        <tr><th>시점</th><th>순위 기준</th></tr>
+        <tr><td>08:58 이전</td><td>오전 순위(전일 종가 기준 점수 순)</td></tr>
+        <tr><td>08:58 이후</td><td>재선정 순위(최대 10종목) 우선, 이후 순위는 오전 순위 유지</td></tr>
+      </table></div>
+      <div class="ev" style="margin-top:10px">재선정 순위는 개장 직전 예상 시가를 반영한 순위. 일반 목록은 재선정 후에도 순위 상위 100종목에 포함된 종목을 유지.</div>
+    </section>
+    <section>
+      <h2>상태 표시</h2>
+      <div class="tw"><table class="plan">
+        <tr><th>표시</th><th>의미</th></tr>
+        <tr><td>최종안 산정 중</td><td>당일 자료 반영 전. 표시 목록은 전일 야간 산출 잠정안</td></tr>
+        <tr><td>오전 순위 확정</td><td>당일 자료를 반영한 오전 순위. 08:58 재선정 예정</td></tr>
+        <tr><td>재선정 순위 산정 중</td><td>개장 직전 재선정 진행</td></tr>
+        <tr><td>재선정 완료 · 최종 순위</td><td>재선정 순위 반영 완료. 당일 순위 확정</td></tr>
+        <tr><td>추천안(종료)</td><td>지난 거래일 목록</td></tr>
+      </table></div>
     </section>
     <section>
       <h2>후보 범위</h2>
@@ -198,7 +221,7 @@ th.l{text-align:left}
         <div class="r"><div class="l">상장 주식 전체</div><div class="bar" style="width:100%"></div><div class="v">2,770</div></div>
         <div class="r"><div class="l">거래 가능 보통주</div><div class="bar" style="width:62%"></div><div class="v">≈1,700</div></div>
         <div class="r"><div class="l">관리·투자경고 이상 제외</div><div class="bar" style="width:60%"></div><div class="v">≈1,670</div></div>
-        <div class="r k"><div class="l">점수 상위</div><div class="bar" style="width:4%;min-width:12px"></div><div class="v">100</div></div>
+        <div class="r k"><div class="l">순위 상위</div><div class="bar" style="width:4%;min-width:12px"></div><div class="v">100</div></div>
         <div class="r k"><div class="l">프리미엄(순위 공개)</div><div class="bar" style="width:2%;min-width:8px"></div><div class="v">40</div></div>
         <div class="r k"><div class="l">일반(무작위)</div><div class="bar" style="width:1%;min-width:6px"></div><div class="v">20</div></div>
       </div>
@@ -275,7 +298,7 @@ function render(t){
   let avg='';
   if(live){const rs=items.map(x=>x.ret).filter(v=>v!=null);if(rs.length){const a=rs.reduce((s,v)=>s+v,0)/rs.length,nl=items.filter(x=>x.lim).length;avg=` · 평균 등락률 <span class="${cls(a)}">${sgn(a)}</span>${nl?` · 상한가 ${nl}`:''}`;}}
   const idx=d.index||{}, mk=live?['KOSPI','KOSDAQ'].filter(k=>idx[k]!=null).map(k=>`<div><b>${k==='KOSPI'?'코스피':'코스닥'}</b><span class="${cls(idx[k])}">${sgn(idx[k])}</span></div>`).join(''):'';
-  el.innerHTML=`${mk?`<div class="mk">${mk}</div>`:''}<section><h2>${prem?`점수 상위 ${items.length}종목 · 종목 선택 시 추천 근거·차트 표시`:`점수 상위 100종목 중 무작위 ${items.length}종목 · 가나다순`}</h2><div class="note">${fmtd(d.as_of)} 종가 기준${d.final===false?' · 잠정안(전일 야간 산출)':''}${live?` · 시세 ${d.q_at.slice(11,19)}${d.closed?' 종가':''}${stale?' <span style="color:#e0b64d">갱신 지연</span>':''}${avg}`:(wait?' · 시세 수신 대기':'')}</div><div class="tw"><table class="lv">${head}${items.map(row).join('')}</table></div></section><button class="lockout" onclick="lockout('${t}')">잠금</button>`;
+  el.innerHTML=`${mk?`<div class="mk">${mk}</div>`:''}<section><h2>${prem?`순위 상위 ${items.length}종목 · 종목 선택 시 추천 근거·차트 표시`:`순위 상위 100종목 중 무작위 ${items.length}종목 · 가나다순`}</h2><div class="note">${fmtd(d.as_of)} 종가 기준${d.final===false?' · 잠정안(전일 야간 산출)':''}${live?` · 시세 ${d.q_at.slice(11,19)}${d.closed?' 종가':''}${stale?' <span style="color:#e0b64d">갱신 지연</span>':''}${avg}`:(wait?' · 시세 수신 대기':'')}</div><div class="tw"><table class="lv">${head}${items.map(row).join('')}</table></div></section><button class="lockout" onclick="lockout('${t}')">잠금</button>`;
   if(prem){el.querySelectorAll('tr.cl').forEach(tr=>tr.onclick=()=>toggle(tr.dataset.c));el.querySelectorAll('.cw').forEach(w=>{w.scrollLeft=w.scrollWidth;});}
   header();
 }
@@ -332,21 +355,35 @@ function flowsSvg(c){
   s+=`<text x="${W-pad.r+6}" y="${pad.t+6}" fill="#8b919c" font-size="12">+${m.toFixed(0)}억</text><text x="${W-pad.r+6}" y="${H-14}" fill="#8b919c" font-size="12">−${m.toFixed(0)}억</text><text x="${W-pad.r}" y="${H-2}" fill="#8b919c" font-size="12" text-anchor="end">${n}일 순매수(억 원)</text>`;
   return s+'</svg>';
 }
+// 상태 표시: 재선정 완료 / 오전 순위 확정 / 산정 중 / 잠정안 / 종료
 function header(){
   const d=DOCS[VIEW]||DOCS.p||DOCS.b; if(!d){$('sub').textContent='';$('st').hidden=true;return;}
   const td=d.target_date, dt=new Date(Date.UTC(+td.slice(0,4),+td.slice(4,6)-1,+td.slice(6,8)));
   $('sub').textContent=`${td.slice(0,4)}.${fmtd(td)} ${DOW[dt.getUTCDay()]} 추천`;
-  const today=kst().toISOString().slice(0,10).replace(/-/g,''), st=$('st'); st.hidden=false;
-  const live=d.q_at&&d.q_at.slice(0,10).replace(/-/g,'')===td;
-  if(td===today&&inSession()&&!d.closed){st.textContent='장중';st.className='badge live';}
-  else if(td===today&&live&&d.closed||td<today){st.textContent='장 마감';st.className='badge';}
-  else if(td===today){st.textContent='개장 전';st.className='badge';}
-  else {st.textContent='익영업일';st.className='badge';}
+  const x=kst(), today=x.toISOString().slice(0,10).replace(/-/g,''), st=$('st'), sh=shift(x);
+  const wk=x.getUTCDay()>=1&&x.getUTCDay()<=5, hm=x.getUTCHours()*60+x.getUTCMinutes();
+  const tm=m=>`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+  const g=String(d.gen||'').replace(/[^0-9]/g,''), gl=g.length>=12?`${g.slice(4,6)}.${g.slice(6,8)} ${g.slice(8,10)}:${g.slice(10,12)} 산출`:'';
+  const calc=wk&&hm>=435+sh&&hm<570+sh;  // 07:15~09:30 최종안 산정 시간대
+  let txt, c='';
+  if(td===today&&d.rr){txt='재선정 완료 · 최종 순위';c='final';}
+  else if(td===today&&d.final!==false){
+    if(wk&&hm<538+sh){txt=`오전 순위 확정 · ${tm(538+sh)} 재선정 예정`;c='final';}
+    else if(wk&&hm<545+sh){txt='재선정 순위 산정 중';c='live';}
+    else{txt='최종 순위 · 오전 순위 기준';c='final';}
+  }
+  else if(td>today)txt=`${fmtd(td)} 잠정안${gl?' · '+gl:''} · 당일 ${tm(440+sh)} 재산정`;
+  else if(td===today&&calc){txt=`최종안 산정 중 · 현재 표시는 잠정안${gl?'('+gl+')':''}`;c='live';}
+  else if(td===today&&wk&&hm<435+sh)txt=`잠정안${gl?'('+gl+')':''} · ${tm(440+sh)} 최종 산정 시작`;
+  else if(td===today)txt=`잠정안${gl?'('+gl+')':''} · 최종 산정 미완료`;
+  else if(calc){txt=`금일 순위 산정 중 · 현재 표시는 ${fmtd(td)} 추천안`;c='live';}
+  else txt=`${fmtd(td)} 추천안(종료)`;
+  st.textContent=txt; st.className='badge'+(c?' '+c:''); st.hidden=false;
 }
 async function refresh(){
   for(const t of ['b','p']){if(!KEYS[t]||(VIEW!==t))continue;try{const e=await getDoc(t);DOCS[t]=await open_(KEYS[t],e);}catch(x){}if(t==='p'&&PD&&DOCS.p&&PD.gen!==DOCS.p.gen&&PDS!=='load')loadDetail();if(DOCS[t]&&VIEW===t)render(t);}
 }
-function startPoll(){if(POLL)return;POLL=setInterval(()=>{const x=kst(),d=x.getUTCDay(),m=x.getUTCHours()*60+x.getUTCMinutes();if(d>=1&&d<=5&&m>=450&&m<=950+shift(x))refresh();},30000);}
+function startPoll(){if(POLL)return;POLL=setInterval(()=>{const x=kst(),d=x.getUTCDay(),m=x.getUTCHours()*60+x.getUTCMinutes();if(d>=1&&d<=5&&m>=430&&m<=950+shift(x))refresh();},30000);}
 
 // ---- 성능
 async function perfUnlock(pw,keep){
