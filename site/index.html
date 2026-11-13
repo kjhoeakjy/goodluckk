@@ -289,7 +289,7 @@ function render(t){
   if(!d){lockForm(el,`${TIERS[t].name} 비밀번호`,(pw,keep)=>unlock(t,pw,keep));return;}
   const live=!!(d.q_at&&d.q_at.slice(0,10).replace(/-/g,'')===d.target_date);
   const prem=t==='p';
-  const head=`<tr>${prem?'<th></th>':''}<th class="l">종목</th><th>${live?'현재가':'전일 종가'}</th><th>${live?'등락률':'전일 등락률'}</th>${live?'<th>시가 대비</th><th class="hm">고가</th>':''}${live?'<th class="hm">거래대금</th>':''}</tr>`;
+  const head=`<tr>${prem?'<th></th>':''}<th class="l">종목</th><th>${live?'현재가':'전일 종가'}</th><th>${live?'등락률':'전일 등락률'}</th>${live?'<th>시가 대비</th><th class="hm">고가 등락률</th>':''}${live?'<th class="hm">거래대금</th>':''}</tr>`;
   const row=x=>{const r=live?x.ret:x.ret1, p=live?x.price:x.close;
     return `<tr${prem?` class="cl${OPEN.has(x.code)?' op':''}" data-c="${x.code}"`:''}>${prem?`<td class="rk">${x.rank}</td>`:''}<td class="nm"><b>${x.name}</b><small>${x.code}</small>${live&&x.lim?'<span class="st">상한가</span>':''}${live&&x.halt?'<span class="st h">정지</span>':''}</td><td>${num(p)}</td><td class="big ${cls(r)}">${sgn(r)}</td>${live?`<td class="${cls(x.o_ret)}">${sgn(x.o_ret)}</td><td class="hm ${cls(x.hi_ret)}">${sgn(x.hi_ret)}</td>`:''}${live?`<td class="hm">${won(x.val)}</td>`:''}</tr>${prem&&OPEN.has(x.code)?`<tr class="dt"><td colspan="7">${detailHtml(x)}</td></tr>`:''}`;};
   const items=d.items||[];
