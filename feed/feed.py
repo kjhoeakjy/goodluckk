@@ -280,11 +280,16 @@ def _txt(v, n: int = 300):
     return str(v)[:n] if v is not None else None
 
 
-def detail_doc(src: dict, codes: list[str]) -> dict:
+def detail_doc(src: dict, codes: list[str], extra: dict | None = None) -> dict:
     """프리미엄 종목 상세(추천 근거·차트·공시·뉴스). 원본 추천 목록에 상세가 있는 종목으로 한정. 모형 점수·변수 표는 제외."""
     want = set(codes)
     items = {}
-    for u in src.get("up") or []:
+    ups = list(src.get("up") or [])
+    have = {u.get("code") for u in ups}
+    # 추천 목록 밖 종목의 상세(원본 detail100: 차트·근거·업종. 공시·뉴스 없음). 기준일이 같을 때에 한해 사용
+    if extra and extra.get("target_date") == src.get("target_date"):
+        ups += [{**v, "code": c} for c, v in (extra.get("rows") or {}).items() if isinstance(v, dict) and c not in have]
+    for u in ups:
         code = u.get("code")
         if code not in want:
             continue
@@ -398,6 +403,7 @@ class Feed:
         self.scores = None
         self.plan: list[dict] = []  # 당일 재선정 순위(없으면 점수 순위)
         self.plan_day = None
+        self.extra = None  # 추천 목록 밖 종목 상세(원본 detail100)
 
     def refresh_source(self) -> bool:
         src = src_file("latest.json.enc")
@@ -465,7 +471,11 @@ class Feed:
         pf = perf_doc(src)
         for k in ("b", "p"):
             write(f"cur/perf.{k}.json.enc", enc(pf, self.pw[k]))
-        dd = detail_doc(src, [it["code"] for it in self.lists["p"]["items"]])
+        codes = [it["code"] for it in self.lists["p"]["items"]]
+        if any(c not in {u.get("code") for u in src.get("up") or []} for c in codes):
+            if self.extra is None or self.extra.get("target_date") != src.get("target_date"):
+                self.extra = src_file("detail100.json.enc") or {}
+        dd = detail_doc(src, codes, self.extra)
         self.detail_n = len(dd["items"])
         write("cur/detail.p.json.enc", enc(dd, self.pw["p"]))
         self.static_ok = True
