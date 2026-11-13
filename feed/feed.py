@@ -246,6 +246,37 @@ def perf_doc(src: dict) -> dict:
             "history": hist, "perf": perf}
 
 
+def _txt(v, n: int = 300):
+    return str(v)[:n] if v is not None else None
+
+
+def detail_doc(src: dict, codes: list[str]) -> dict:
+    """프리미엄 종목 상세(추천 근거·차트·공시·뉴스). 원본 추천 목록에 상세가 있는 종목으로 한정. 모형 점수·변수 표는 제외."""
+    want = set(codes)
+    items = {}
+    for u in src.get("up") or []:
+        code = u.get("code")
+        if code not in want:
+            continue
+        ch = u.get("chart") or {}
+        ev = u.get("evidence") or {}
+        llm = u.get("llm") if isinstance(u.get("llm"), dict) else None
+        g = u.get("groups") or {}
+        items[code] = {
+            "chart": {k: ch[k] for k in ("d", "o", "h", "l", "c", "v", "fd", "frgn", "inst", "indiv") if isinstance(ch.get(k), list)},
+            "up_limit": u.get("up_limit"),
+            "reasons": [{"text": _txt(r.get("text"), 80), "dir": "-" if r.get("dir") == "-" else "+"}
+                        for r in (u.get("reasons") or []) if isinstance(r, dict) and r.get("text")][:6],
+            "groups": {"industry": [_txt(x, 40) for x in (g.get("industry") or [])][:1], "themes": [_txt(x, 40) for x in (g.get("themes") or [])][:6]},
+            "news": [{"t": _txt(n.get("t"), 16), "title": _txt(n.get("title")), "url": _txt(n.get("url"), 500)}
+                     for n in (ev.get("news") or []) if isinstance(n, dict) and n.get("title")][:4],
+            "disc": [{"t": _txt(x.get("t"), 20), "title": _txt(x.get("title"))}
+                     for x in (ev.get("disclosures") or []) if isinstance(x, dict) and x.get("title")][:6],
+            "llm": ({"verdict": _txt(llm.get("verdict"), 10), "event": _txt(llm.get("event"), 60), "note": _txt(llm.get("note"), 300)} if llm else None),
+        }
+    return {"target_date": src.get("target_date"), "gen": src.get("generated_at"), "items": items}
+
+
 def ranking(src: dict, scores: dict | None) -> list[dict]:
     """점수 순위 상위 POOL: [{code,name,close,ret1}]. 전 종목 점수표(정렬됨)가 같은 기준일이면 사용, 아니면 추천 목록."""
     rows = []
@@ -329,6 +360,7 @@ class Feed:
         self.index: dict = lb.get("index") or {}
         self.qat = None  # 이번 실행에서 받은 시세 시각(없으면 이전 실행이 남긴 값을 그대로 둠)
         self.closed = bool(lb.get("closed"))
+        self.static_ok = False
 
     def refresh_source(self) -> bool:
         src = src_file("latest.json.enc")
@@ -338,6 +370,8 @@ class Feed:
         t = now()
         today = ymd(t)
         if src.get("generated_at") == self.gen and self.lists["b"] and self.lists["p"]:
+            if not self.static_ok:
+                self.write_static(src)  # 실행마다 1회 재기록(이전 실행이 남기지 못한 경우 대비)
             return False
         if src["target_date"] < today:
             print("[src] 지난 기준일 자료 · 유지")
@@ -355,11 +389,18 @@ class Feed:
         self.lists["b"], self.lists["p"] = built
         self.gen = src.get("generated_at")
         self.quotes, self.qat, self.closed = {}, None, False
+        self.write_static(src)
+        print(f"[src] 목록 발행 · 기준일 {src['target_date']} · {'최종' if built[0]['final'] else '잠정'}")
+        return True
+
+    def write_static(self, src: dict) -> None:
+        """목록과 함께 바뀌는 자료: 성능(두 요금제), 종목 상세(프리미엄)."""
         pf = perf_doc(src)
         for k in ("b", "p"):
             write(f"cur/perf.{k}.json.enc", enc(pf, self.pw[k]))
-        print(f"[src] 목록 발행 · 기준일 {src['target_date']} · {'최종' if built[0]['final'] else '잠정'}")
-        return True
+        write("cur/detail.p.json.enc", enc(detail_doc(src, [it["code"] for it in self.lists["p"]["items"]]), self.pw["p"]))
+        self.static_ok = True
+        self._sig = None  # 다음 기록 때 함께 올라가도록
 
     def refresh_quotes(self) -> bool:
         b, p = self.lists["b"], self.lists["p"]
