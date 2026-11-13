@@ -268,14 +268,24 @@ function inSession(){const x=kst(),d=x.getUTCDay(),m=x.getUTCHours()*60+x.getUTC
 function shift(x){return {'20261119':60}[x.toISOString().slice(0,10).replace(/-/g,'')]||0;}
 
 // ---- 잠금 화면
+// 비밀번호 오류 누적 10회 시 해당 기기 접속 차단(성공 시 초기화)
+const FAIL_MAX=10; let FAILM=0;
+function fails(){try{return Math.max(FAILM,+(localStorage.getItem('glk_fail')||0)||0);}catch(e){return FAILM;}}
+function setFails(n){FAILM=n;try{if(n)localStorage.setItem('glk_fail',n);else localStorage.removeItem('glk_fail');}catch(e){}}
+function blocked(){return fails()>=FAIL_MAX;}
+function blockAll(){for(const t of ['b','p']){delete KEYS[t];delete DOCS[t];store.del('glk_'+t);}PD=null;PDS='';OPEN.clear();PDOC=null;
+  const m='<div class="lock"><div class="t">접속 차단</div><div class="err">비밀번호 '+FAIL_MAX+'회 오류</div></div>';
+  $('v-b').innerHTML=m;$('v-p').innerHTML=m;$('perf-lock').innerHTML=m;$('perf-lock').hidden=false;$('perf-body').hidden=true;}
 function lockForm(el,label,onpw){
+  if(blocked()){blockAll();return;}
   el.innerHTML=`<form class="lock" autocomplete="off"><div class="t">${label}</div><input type="password" placeholder="비밀번호"><label><input type="checkbox"> 비밀번호 기기 저장</label><button type="submit">확인</button><div class="err"></div></form>`;
   const f=el.querySelector('form'),inp=f.querySelector('input[type=password]'),err=f.querySelector('.err');
   f.onsubmit=async ev=>{ev.preventDefault();err.textContent='확인 중';const ok=await onpw(inp.value,f.querySelector('input[type=checkbox]').checked);
-    if(ok==='net')err.textContent='자료 수신 실패';else if(!ok){err.textContent='비밀번호 불일치';inp.value='';inp.focus();}};
+    if(ok==='net')err.textContent='자료 수신 실패';else if(!ok){const n=fails()+1;setFails(n);if(n>=FAIL_MAX){blockAll();return;}err.textContent=`비밀번호 불일치(${n}/${FAIL_MAX})`;inp.value='';inp.focus();}else setFails(0);};
   setTimeout(()=>inp.focus(),0);
 }
 async function unlock(t,pw,keep){
+  if(blocked())return false;
   let e;try{e=await getDoc(t);}catch(x){return 'net';}
   try{const k=await derive(pw,e);DOCS[t]=await open_(k,e);KEYS[t]=k;}catch(x){return false;}
   if(pw)store.set('glk_'+t,pw,keep);
