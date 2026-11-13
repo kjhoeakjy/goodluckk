@@ -1,4 +1,4 @@
-# GOOD LUCK
+# GOODLUCK
 
 화면: https://kjhoeakjy.github.io/goodluckk/
 
