@@ -121,31 +121,31 @@ th.l{text-align:left}
   <div class="view" id="v-plan">
     <section>
       <h2>페이지 소개</h2>
-      <div class="note" style="margin:0">거래일 아침마다 당일 상승 가능성이 높은 국내 주식을 골라 보여 주는 페이지. 장중에는 추천 종목의 현재가를 30초 간격으로 갱신. 매수·매도 시점과 수량은 제시하지 않으며, 투자 여부는 이용자가 직접 판단.</div>
+      <div class="note" style="margin:0">거래일 개장 전 당일 상승 가능성이 높은 국내 주식을 선정하여 제시. 장중 추천 종목의 현재가를 30초 간격으로 갱신. 매수·매도 시점과 수량은 제시하지 않음. 투자 여부는 이용자가 판단.</div>
     </section>
     <section>
       <h2>요금제</h2>
       <div class="tw"><table class="plan">
         <tr><th></th><th>일반</th><th>프리미엄</th></tr>
         <tr><td>종목 수</td><td>20</td><td>40</td></tr>
-        <tr><td>선정 방식</td><td>상위 100종목 중 무작위</td><td>점수 상위 1~40위</td></tr>
-        <tr><td>순위 표시</td><td>없음</td><td>있음</td></tr>
+        <tr><td>선정 방식</td><td>점수 상위 100종목 중 무작위</td><td>점수 상위 40종목</td></tr>
+        <tr><td>순위 표시</td><td>미제공</td><td>제공</td></tr>
         <tr><td>장중 현재가</td><td>제공</td><td>제공</td></tr>
         <tr><td>성능 탭</td><td>제공</td><td>제공</td></tr>
       </table></div>
-      <div class="ev" style="margin-top:12px">일반과 프리미엄은 비밀번호가 다름. 일반 목록은 하루 한 번 정해지며 같은 날에는 바뀌지 않음.</div>
+      <div class="ev" style="margin-top:12px">요금제별 비밀번호 상이. 일반 목록은 일 1회 확정 후 당일 유지.</div>
     </section>
     <section>
       <h2>이용 방법</h2>
       <div class="cards">
         <div class="c"><b>07:45 이후</b><span>당일 추천 목록 확인</span></div>
-        <div class="c"><b>09:00~15:30</b><span>추천 종목의 현재가·등락률 확인</span></div>
-        <div class="c"><b>성능 탭</b><span>과거 추천의 검증 결과와 최근 실전 결과 확인</span></div>
+        <div class="c"><b>09:00~15:30</b><span>현재가·등락률 확인</span></div>
+        <div class="c"><b>성능 탭</b><span>과거 검증 결과와 최근 실전 결과 확인</span></div>
       </div>
     </section>
     <section>
       <h2>유의 사항</h2>
-      <div class="note" style="margin:0">추천은 과거 자료로 학습한 모형의 계산 결과이며 수익을 보장하지 않음. 추천 종목은 변동성이 큰 경우가 많아 손실 폭도 클 수 있음. 성능 탭의 수치는 과거 검증 결과이고 실제 매매 결과와 다를 수 있음.</div>
+      <div class="note" style="margin:0">추천은 과거 자료로 학습한 모형의 산출 결과이며 수익을 보장하지 않음. 추천 종목은 변동성이 높아 손실 위험이 큼. 성능 탭의 수치는 과거 검증 결과이며 실제 매매 결과와 상이할 수 있음.</div>
     </section>
   </div>
 
@@ -157,23 +157,23 @@ th.l{text-align:left}
         <div class="c"><b>수급</b><span>외국인·기관·개인 순매수</span></div>
         <div class="c"><b>공시</b><span>거래소·DART 공시 제목</span></div>
         <div class="c"><b>뉴스</b><span>종목별 뉴스 제목</span></div>
-        <div class="c"><b>종목토론방</b><span>게시글 수와 변화</span></div>
-        <div class="c"><b>업종·테마</b><span>업종·테마 단위 등락과 거래</span></div>
+        <div class="c"><b>종목토론방</b><span>게시글 수와 증감</span></div>
+        <div class="c"><b>업종·테마</b><span>업종·테마별 등락률과 거래대금</span></div>
         <div class="c"><b>해외 지표</b><span>미국 지수, 반도체 지수, 환율, 변동성 지수</span></div>
       </div>
-      <div class="ev" style="margin-top:10px">전일 종가까지의 자료만 사용. 2019년 이후 자료로 학습한 머신러닝 모형이 종목별 당일 기대 수익을 점수로 산출.</div>
+      <div class="ev" style="margin-top:10px">전일 종가 시점까지의 자료 사용. 2020년 이후 자료로 학습한 기계학습 모형이 종목별 당일 기대 수익을 점수로 산출.</div>
     </section>
     <section>
       <h2>일정(한국시간, 거래일)</h2>
       <div class="tl">
-        <div class="n"><div class="t">전날 16:00</div><div class="h">전일 자료 확정</div><div class="d">일봉·수급·업종 자료 마감</div></div>
+        <div class="n"><div class="t">전일 16:00</div><div class="h">전일 자료 확정</div><div class="d">일봉·수급·업종 자료 마감</div></div>
         <div class="n k"><div class="t">07:20</div><div class="h">자료 수집</div><div class="d">공시·뉴스·토론방·해외 지표 수집</div></div>
-        <div class="n k"><div class="t">07:30</div><div class="h">학습·점수 산출</div><div class="d">모형 재학습 후 전 종목 점수화</div></div>
+        <div class="n k"><div class="t">07:30</div><div class="h">학습·점수 산출</div><div class="d">모형 재학습 후 전 종목 점수 산출</div></div>
         <div class="n k"><div class="t">07:45</div><div class="h">추천 발행</div><div class="d">일반·프리미엄 목록 갱신</div></div>
-        <div class="n"><div class="t">09:00</div><div class="h">장중 시세</div><div class="d">15:30까지 30초 간격 현재가 갱신</div></div>
-        <div class="n"><div class="t">다음 날</div><div class="h">결과 채점</div><div class="d">전날 추천 결과를 성능 탭에 반영</div></div>
+        <div class="n"><div class="t">09:00</div><div class="h">장중 시세</div><div class="d">30초 간격 현재가 갱신(15:30 종료)</div></div>
+        <div class="n"><div class="t">익영업일</div><div class="h">결과 채점</div><div class="d">전일 추천 결과를 성능 탭에 반영</div></div>
       </div>
-      <div class="ev" style="margin-top:12px">개장 시각이 늦춰지는 날(수능일 등)은 장중 일정도 같은 시간만큼 늦춰짐.</div>
+      <div class="ev" style="margin-top:12px">개장 시각 변경일(수능일 등)은 장중 일정 동일 시간 순연.</div>
     </section>
     <section>
       <h2>후보 범위</h2>
@@ -183,12 +183,12 @@ th.l{text-align:left}
         <div class="r"><div class="l">관리·투자경고 이상 제외</div><div class="bar" style="width:60%"></div><div class="v">≈1,670</div></div>
         <div class="r k"><div class="l">점수 상위</div><div class="bar" style="width:4%;min-width:12px"></div><div class="v">100</div></div>
         <div class="r k"><div class="l">프리미엄(순위 공개)</div><div class="bar" style="width:2%;min-width:8px"></div><div class="v">40</div></div>
-        <div class="r k"><div class="l">일반(상위 100 중 무작위)</div><div class="bar" style="width:1%;min-width:6px"></div><div class="v">20</div></div>
+        <div class="r k"><div class="l">일반(무작위)</div><div class="bar" style="width:1%;min-width:6px"></div><div class="v">20</div></div>
       </div>
     </section>
   </div>
 
-  <div class="foot">자료: 네이버 금융·DART·야후 파이낸스. 투자 권유 아님. 투자 판단과 결과의 책임은 투자자 본인에게 있음.</div>
+  <div class="foot">자료: 네이버 금융·DART·야후 파이낸스. 투자 권유 아님. 투자 판단과 결과의 책임은 이용자에게 있음.</div>
 </div>
 <script>
 'use strict';
@@ -215,7 +215,7 @@ const store={get(k){try{return sessionStorage.getItem(k)||localStorage.getItem(k
 async function derive(pw,e){const te=new TextEncoder(),base=await crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deriveKey']);
   return crypto.subtle.deriveKey({name:'PBKDF2',salt:te.encode(e.salt),iterations:e.iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);}
 async function open_(key,e){const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(e.iv)},key,b64(e.ct));return JSON.parse(new TextDecoder().decode(pt));}
-async function fetchEnc(path){const r=await fetch(RAW+path,{cache:'no-store'});if(!r.ok)throw new Error(r.status);return r.json();}
+async function fetchEnc(path){const c=new AbortController(),tm=setTimeout(()=>c.abort(),10000);try{const r=await fetch(RAW+path,{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json();}finally{clearTimeout(tm);}}
 // 장중: 10초 단위 슬롯 파일(새 주소라 CDN 캐시 없음) 중 가장 최근 것, 없으면 고정 파일(최대 5분 캐시)
 const SLOT_LAST={b:0,p:0};
 async function getDoc(t){
@@ -229,14 +229,14 @@ function shift(x){return {'20261119':60}[x.toISOString().slice(0,10).replace(/-/
 
 // ---- 잠금 화면
 function lockForm(el,label,onpw){
-  el.innerHTML=`<form class="lock" autocomplete="off"><div class="t">${label}</div><input type="password" placeholder="비밀번호"><label><input type="checkbox"> 이 기기에 저장</label><button type="submit">열기</button><div class="err"></div></form>`;
+  el.innerHTML=`<form class="lock" autocomplete="off"><div class="t">${label}</div><input type="password" placeholder="비밀번호"><label><input type="checkbox"> 기기에 저장</label><button type="submit">확인</button><div class="err"></div></form>`;
   const f=el.querySelector('form'),inp=f.querySelector('input[type=password]'),err=f.querySelector('.err');
   f.onsubmit=async ev=>{ev.preventDefault();err.textContent='확인 중';const ok=await onpw(inp.value,f.querySelector('input[type=checkbox]').checked);
-    if(!ok){err.textContent='비밀번호 불일치';inp.value='';inp.focus();}};
+    if(ok==='net')err.textContent='자료 수신 실패';else if(!ok){err.textContent='비밀번호 불일치';inp.value='';inp.focus();}};
   setTimeout(()=>inp.focus(),0);
 }
 async function unlock(t,pw,keep){
-  let e;try{e=await getDoc(t);}catch(x){$('v-'+t).querySelector('.err')&&( $('v-'+t).querySelector('.err').textContent='자료 없음');return true;}
+  let e;try{e=await getDoc(t);}catch(x){return 'net';}
   try{const k=await derive(pw,e);DOCS[t]=await open_(k,e);KEYS[t]=k;}catch(x){return false;}
   if(pw)store.set('glk_'+t,pw,keep);
   render(t);return true;
@@ -249,14 +249,16 @@ function render(t){
   if(!d){lockForm(el,`${TIERS[t].name} 비밀번호`,(pw,keep)=>unlock(t,pw,keep));return;}
   const live=!!(d.q_at&&d.q_at.slice(0,10).replace(/-/g,'')===d.target_date);
   const prem=t==='p';
-  const head=`<tr>${prem?'<th></th>':''}<th class="l">종목</th><th>${live?'현재가':'전일 종가'}</th><th>${live?'등락률':'전일 등락'}</th>${live?'<th class="hm">시가 대비</th><th class="hm">고가</th>':''}${live?'<th class="hm">거래대금</th>':''}</tr>`;
+  const head=`<tr>${prem?'<th></th>':''}<th class="l">종목</th><th>${live?'현재가':'전일 종가'}</th><th>${live?'등락률':'전일 등락률'}</th>${live?'<th class="hm">시가 대비</th><th class="hm">고가</th>':''}${live?'<th class="hm">거래대금</th>':''}</tr>`;
   const row=x=>{const r=live?x.ret:x.ret1, p=live?x.price:x.close;
     return `<tr>${prem?`<td class="rk">${x.rank}</td>`:''}<td class="nm"><b>${x.name}</b><small>${x.code}</small>${live&&x.lim?'<span class="st">상한가</span>':''}${live&&x.halt?'<span class="st h">정지</span>':''}</td><td>${num(p)}</td><td class="big ${cls(r)}">${sgn(r)}</td>${live?`<td class="hm ${cls(x.o_ret)}">${sgn(x.o_ret)}</td><td class="hm ${cls(x.hi_ret)}">${sgn(x.hi_ret)}</td>`:''}${live?`<td class="hm">${won(x.val)}</td>`:''}</tr>`;};
   const items=d.items||[];
+  const today=kst().toISOString().slice(0,10).replace(/-/g,''), sess=d.target_date===today&&inSession()&&!d.closed;
+  const stale=live&&sess&&(kst().getTime()-Date.parse(d.q_at.replace(' ','T')+'Z'))>180e3, wait=!live&&sess;
   let avg='';
-  if(live){const rs=items.map(x=>x.ret).filter(v=>v!=null);if(rs.length){const a=rs.reduce((s,v)=>s+v,0)/rs.length,nl=items.filter(x=>x.lim).length;avg=` · 평균 <span class="${cls(a)}">${sgn(a)}</span>${nl?` · 상한가 ${nl}`:''}`;}}
+  if(live){const rs=items.map(x=>x.ret).filter(v=>v!=null);if(rs.length){const a=rs.reduce((s,v)=>s+v,0)/rs.length,nl=items.filter(x=>x.lim).length;avg=` · 평균 등락률 <span class="${cls(a)}">${sgn(a)}</span>${nl?` · 상한가 ${nl}`:''}`;}}
   const idx=d.index||{}, mk=live?['KOSPI','KOSDAQ'].filter(k=>idx[k]!=null).map(k=>`<div><b>${k==='KOSPI'?'코스피':'코스닥'}</b><span class="${cls(idx[k])}">${sgn(idx[k])}</span></div>`).join(''):'';
-  el.innerHTML=`${mk?`<div class="mk">${mk}</div>`:''}<section><h2>${prem?`상위 ${items.length}종목 · 점수 순`:`후보 상위 100종목 중 무작위 ${items.length}종목 · 가나다순`}</h2><div class="note">${fmtd(d.as_of)} 종가 기준 점수${d.final===false?' · 잠정안(전일 밤 계산)':''}${live?` · 시세 ${d.q_at.slice(11,19)}${d.closed?' 종가':''}${avg}`:''}</div><div class="tw"><table class="lv">${head}${items.map(row).join('')}</table></div></section><button class="lockout" onclick="lockout('${t}')">잠금</button>`;
+  el.innerHTML=`${mk?`<div class="mk">${mk}</div>`:''}<section><h2>${prem?`점수 상위 ${items.length}종목`:`점수 상위 100종목 중 무작위 ${items.length}종목 · 가나다순`}</h2><div class="note">${fmtd(d.as_of)} 종가 기준${d.final===false?' · 잠정안(전일 야간 산출)':''}${live?` · 시세 ${d.q_at.slice(11,19)}${d.closed?' 종가':''}${stale?' <span class="neg">갱신 지연</span>':''}${avg}`:(wait?' · 시세 수신 대기':'')}</div><div class="tw"><table class="lv">${head}${items.map(row).join('')}</table></div></section><button class="lockout" onclick="lockout('${t}')">잠금</button>`;
   header();
 }
 function header(){
@@ -267,22 +269,23 @@ function header(){
   const live=d.q_at&&d.q_at.slice(0,10).replace(/-/g,'')===td;
   if(td===today&&inSession()&&!d.closed){st.textContent='장중';st.className='badge live';}
   else if(td===today&&live&&d.closed||td<today){st.textContent='장 마감';st.className='badge';}
-  else if(td===today){st.textContent='장 시작 전';st.className='badge';}
-  else {st.textContent='다음 거래일';st.className='badge';}
+  else if(td===today){st.textContent='개장 전';st.className='badge';}
+  else {st.textContent='익영업일';st.className='badge';}
 }
 async function refresh(){
-  for(const t of ['b','p']){if(!KEYS[t]||(VIEW!==t))continue;try{const e=await getDoc(t);const d=await open_(KEYS[t],e);if(!DOCS[t]||JSON.stringify(d)!==JSON.stringify(DOCS[t])){DOCS[t]=d;render(t);}}catch(x){}}
+  for(const t of ['b','p']){if(!KEYS[t]||(VIEW!==t))continue;try{const e=await getDoc(t);DOCS[t]=await open_(KEYS[t],e);}catch(x){}if(DOCS[t]&&VIEW===t)render(t);}
 }
 function startPoll(){if(POLL)return;POLL=setInterval(()=>{const x=kst(),d=x.getUTCDay(),m=x.getUTCHours()*60+x.getUTCMinutes();if(d>=1&&d<=5&&m>=450&&m<=950+shift(x))refresh();},30000);}
 
 // ---- 성능
 async function perfUnlock(pw,keep){
-  for(const t of ['p','b']){let e;try{e=await fetchEnc(`cur/perf.${t}.json.enc`);}catch(x){continue;}
+  let net=0;
+  for(const t of ['p','b']){let e;try{e=await fetchEnc(`cur/perf.${t}.json.enc`);}catch(x){net++;continue;}
     try{const k=KEYS[t]&&!pw?KEYS[t]:await derive(pw,e);PDOC=await open_(k,e);if(pw){KEYS[t]=KEYS[t]||k;store.set('glk_'+t,pw,keep);}showPerf();return true;}catch(x){}}
-  return false;
+  return net===2?'net':false;
 }
 async function showPerf(){
-  if(!PDOC){for(const t of ['p','b'])if(KEYS[t]&&await perfUnlock('',false))return;
+  if(!PDOC){for(const t of ['p','b'])if(KEYS[t]&&(await perfUnlock('',false))===true)return;
     $('perf-body').hidden=true;lockForm($('perf-lock'),'일반 또는 프리미엄 비밀번호',perfUnlock);return;}
   $('perf-lock').innerHTML='';$('perf-body').hidden=false;stats(PDOC);
 }
@@ -299,13 +302,13 @@ function stats(d){
   $('hz').innerHTML=avail.map(h=>`<button class="${h===HZ?'on':''}" data-h="${h}">${h}개월</button>`).join('');
   $('hz').querySelectorAll('button').forEach(b=>b.onclick=()=>{HZ=+b.dataset.h;try{localStorage.setItem('glk_hz',HZ);}catch(e){}stats(d);});
   const EXD=d.exec||{}, EX=(EXD.horizons||{})[String(HZ)]||null, sim=su.sim||null, net=su.net||null;
-  const exTiles=EX?kv(`<span class="${cls(EX.cum)}">${won0(EX.final)}</span>`,`${HM} 전 100만 원 시작 시 현재 잔고 · 실제 체결 기준`,EX.approx_share?`분봉 없는 구간 ${Math.round(EX.approx_share*100)}%는 일봉 근사`:'')
-      +kv(`<span class="${cls(EX.fixed_cum)}">${(EX.fixed_pnl>=0?'+':'')+won0(EX.fixed_pnl)}</span>`,`매일 100만 원 투자 시 ${HM} 누적 손익`)
-      +kv(pc(EX.day_avg),'하루 평균 수익')+kv(pct(EX.win,0),'수익일 비율')+kv(pc(EX.worst),'최대 일 손실')+kv(pc(EX.mdd),'최대 낙폭'):'';
-  const simTiles=exTiles||(sim?kv(`<span class="${cls(sim.cum)}">${won0(sim.final)}</span>`,`${HM} 전 100만 원 시작 시 현재 잔고 · 일봉 가정`)+kv(pc(sim.mdd),'최대 낙폭'):'');
+  const exTiles=EX?kv(`<span class="${cls(EX.cum)}">${won0(EX.final)}</span>`,`${HM} 전 100만 원 투자 시 현재 잔고 · 실제 체결 기준`,EX.approx_share?`분봉 미보유 구간 ${Math.round(EX.approx_share*100)}%는 일봉 근사`:'')
+      +kv(`<span class="${cls(EX.fixed_cum)}">${(EX.fixed_pnl>=0?'+':'')+won0(EX.fixed_pnl)}</span>`,`일 100만 원 투자 시 ${HM} 누적 손익`)
+      +kv(pc(EX.day_avg),'일평균 수익률')+kv(pct(EX.win,0),'수익일 비율')+kv(pc(EX.worst),'최대 일 손실')+kv(pc(EX.mdd),'최대 낙폭'):'';
+  const simTiles=exTiles||(sim?kv(`<span class="${cls(sim.cum)}">${won0(sim.final)}</span>`,`${HM} 전 100만 원 투자 시 현재 잔고 · 일봉 가정`)+kv(pc(sim.mdd),'최대 낙폭'):'');
   $('stat').innerHTML=simTiles+(!exTiles&&net&&net.trade_day!=null?kv(pc(net.trade_day),'거래일 평균 순수익')+kv(pct(net.trade_loss_days,0),'손실일 비율')+kv(pc(net.trade_worst),'최대 일 손실'):'')
-    +(su['oc10@5']!=null?kv(pct(su['oc10@5'],0),'추천 종목 중 +10% 도달'):'')+(su['oc_win@5']!=null?kv(pct(su['oc_win@5'],0),'추천 종목 중 수익 마감'):'')+(su['unbuyable@5']!=null?kv(pct(su['unbuyable@5'],0),'시가 상한가(매수 불가) 비율'):'');
-  $('perfsub').textContent=`최근 ${HM} ${su.days||'-'}거래일 전진 검증(해당 시점 이전 자료만으로 학습) · 매일 상위 ${EXD.k||3}종목 · ${EX?'실제 체결 기준':'일봉 가정'} · 거래 비용 0.53% 차감`;
+    +(su['oc10@5']!=null?kv(pct(su['oc10@5'],0),'추천 종목 중 +10% 도달 비율'):'')+(su['oc_win@5']!=null?kv(pct(su['oc_win@5'],0),'추천 종목 중 수익 마감 비율'):'')+(su['unbuyable@5']!=null?kv(pct(su['unbuyable@5'],0),'시가 상한가(매수 불가) 비율'):'');
+  $('perfsub').textContent=`최근 ${HM} ${su.days||'-'}거래일 전진 검증(각 시점 이전 자료로 학습) · 일 상위 ${EXD.k||3}종목 · ${EX?'실제 체결 기준':'일봉 가정'} · 거래 비용 0.53% 차감`;
   const exDaily=(EX&&EXD.daily)?EXD.daily.filter(r=>r.d>=EX.from&&r.d<=EX.to):null;
   const exRows=exDaily&&exDaily.length>1?(()=>{let b=1e6;return exDaily.map(r=>{b*=1+r.ret;return {d:r.d,bal:Math.round(b)};});})():null;
   $('monthly').innerHTML=(exRows?balSvg(exRows):(sim&&sim.daily?balSvg(sim.daily):''))+monthlySvg(su.monthly||[]);
@@ -322,7 +325,7 @@ function balSvg(rows){
   const W=760,H=240,pad={l:8,r:90,t:40,b:28}, n=rows.length; if(n<2) return '';
   const v=rows.map(r=>r.bal), hi=Math.max(...v,1e6), lo=Math.min(...v,1e6), LOG=hi/lo>20, tr=b=>LOG?Math.log(b):b;
   const x=i=>pad.l+(W-pad.l-pad.r)*i/(n-1), y=b=>pad.t+(tr(hi)-tr(b))/(tr(hi)-tr(lo)||1)*(H-pad.t-pad.b);
-  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><text x="${pad.l}" y="22" fill="#8b919c" font-size="13">100만 원 시작 잔고 추이(복리${LOG?', 로그 눈금':''})</text>`;
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><text x="${pad.l}" y="22" fill="#8b919c" font-size="13">100만 원 투자 시 잔고 추이(복리${LOG?', 로그 눈금':''})</text>`;
   for(let i=0;i<=4;i++){const b=LOG?Math.exp(Math.log(lo)+(Math.log(hi)-Math.log(lo))*i/4):lo+(hi-lo)*i/4, yy=y(b); s+=`<line x1="${pad.l}" x2="${W-pad.r}" y1="${yy}" y2="${yy}" stroke="#262a33"/><text x="${W-pad.r+6}" y="${yy+5}" fill="#8b919c" font-size="13">${Math.round(b/10000).toLocaleString()}만</text>`;}
   s+=`<line x1="${pad.l}" x2="${W-pad.r}" y1="${y(1e6)}" y2="${y(1e6)}" stroke="#8b919c" stroke-dasharray="4 4"/>`;
   s+=`<polyline points="${rows.map((r,i)=>`${x(i)},${y(r.bal)}`).join(' ')}" fill="none" stroke="${v[n-1]>=1e6?'#ff4d4d':'#4d8cff'}" stroke-width="2"/>`;
@@ -380,7 +383,7 @@ async function show(v){
   document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
   try{localStorage.setItem('glk_view',v);}catch(e){}
-  if(v==='b'||v==='p'){if(!DOCS[v]){const pw=store.get('glk_'+v);$('v-'+v).innerHTML='<div class="ev" style="margin:24px 0">불러오는 중</div>';if(!(pw&&await unlock(v,pw,!!localStorage.getItem('glk_'+v))))render(v);}else{render(v);refresh();}}
+  if(v==='b'||v==='p'){if(!DOCS[v]){const pw=store.get('glk_'+v);$('v-'+v).innerHTML='<div class="ev" style="margin:24px 0">자료 수신 중</div>';let keep=false;try{keep=!!localStorage.getItem('glk_'+v);}catch(e){}const r=pw?await unlock(v,pw,keep):false;if(VIEW===v&&r!==true){render(v);if(r==='net'){const er=$('v-'+v).querySelector('.err');if(er)er.textContent='자료 수신 실패';}}}else{render(v);refresh();}}
   else if(v==='perf')showPerf();
   header();
 }
@@ -388,6 +391,7 @@ document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>show(b.datase
 let v0='b';try{v0=localStorage.getItem('glk_view')||'b';}catch(e){}
 show(['b','p','perf','plan','info'].includes(v0)?v0:'b');
 startPoll();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
 </script>
 </body>
 </html>

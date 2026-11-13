@@ -293,7 +293,7 @@ def write(name: str, text: str) -> None:
 
 def push(msg: str) -> None:
     def g(*a, check=True):
-        return subprocess.run(["git", "-C", str(OUT), *a], check=check, capture_output=True, text=True)
+        return subprocess.run(["git", "-C", str(OUT), *a], check=check, capture_output=True, text=True, timeout=60)
     g("add", "-A")
     if not g("diff", "--cached", "--quiet", check=False).returncode:
         return
@@ -412,11 +412,17 @@ def run(loop: bool) -> int:
         wk = t.weekday() < 5
         today_list = (f.lists["b"] or {}).get("target_date") == ymd(t)
         in_sess = wk and op <= t <= cl + dt.timedelta(minutes=2)
-        if (in_sess and today_list) or not loop:
-            f.refresh_quotes()
-        if t > cl + dt.timedelta(minutes=2) and f.qat and f.qat[:10] == t.strftime("%Y-%m-%d"):
-            f.closed = True  # 장 마감 후 받은 시세 = 종가
-        f.emit(slot=in_sess)
+        try:
+            if (in_sess and today_list) or not loop:
+                f.refresh_quotes()
+            if t > cl + dt.timedelta(minutes=2) and f.qat and f.qat[:10] == t.strftime("%Y-%m-%d"):
+                f.closed = True  # 장 마감 후 받은 시세 = 종가
+            f.emit(slot=in_sess)
+        except Exception as e:  # noqa: BLE001  한 주기 실패가 전체 종료로 이어지지 않도록
+            print(f"[run] 주기 오류: {type(e).__name__}")
+            f._sig = None
+            if not loop:
+                return 1
         if not loop:
             return 0
         if time.time() - t0 > MAX_RUN or not wk or t > cl + dt.timedelta(minutes=5):
@@ -427,7 +433,10 @@ def run(loop: bool) -> int:
             return 0
         # 원본 자료 확인: 장 시작 전 3분, 장중 20분 간격
         if time.time() - last_src > (180 if t < op else 1200):
-            f.refresh_source()
+            try:
+                f.refresh_source()
+            except Exception as e:  # noqa: BLE001
+                print(f"[run] 원본 확인 오류: {type(e).__name__}")
             last_src = time.time()
         time.sleep(max(1.0, TICK - (time.time() % TICK)))
 
