@@ -143,6 +143,19 @@ def plan_order() -> tuple[str, list[dict]] | None:
     """원본 실시간 자료에서 당일 순위(종목 코드 순서)만 읽음. 반환 (거래일, [{code, name}]). 주문·계좌 항목은 읽지 않음."""
     pw = os.environ["SRC_PASSWORD"]
     base = f"https://raw.githubusercontent.com/{SRC_REPO}/live/"
+    # 순위 전용 파일(rank.json.enc: 종목 코드 순서) 우선. 없거나 재선정 전(빈 순서)이면 아래 실시간 자료의 계획 순서 사용
+    raw = http(base + "rank.json.enc", timeout=10, tries=1, quiet=True)
+    if raw is not None:
+        try:
+            doc = json.loads(dec(json.loads(raw), pw))
+            day, order = doc.get("date"), doc.get("order") or []
+            if day and day == doc.get("target_date") and order:
+                seen: set = set()
+                items = [{"code": c, "name": None} for c in order if isinstance(c, str) and c and not (c in seen or seen.add(c))]
+                if items:
+                    return day, items
+        except Exception:  # noqa: BLE001
+            pass
     top = int((time.time() - 20) // 10)
     names = [f"t/{k}.json.enc" for k in range(top, top - 9, -1)] + ["live.json.enc"]
     for name in names:
