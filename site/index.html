@@ -258,7 +258,7 @@ function render(t){
   let avg='';
   if(live){const rs=items.map(x=>x.ret).filter(v=>v!=null);if(rs.length){const a=rs.reduce((s,v)=>s+v,0)/rs.length,nl=items.filter(x=>x.lim).length;avg=` · 평균 등락률 <span class="${cls(a)}">${sgn(a)}</span>${nl?` · 상한가 ${nl}`:''}`;}}
   const idx=d.index||{}, mk=live?['KOSPI','KOSDAQ'].filter(k=>idx[k]!=null).map(k=>`<div><b>${k==='KOSPI'?'코스피':'코스닥'}</b><span class="${cls(idx[k])}">${sgn(idx[k])}</span></div>`).join(''):'';
-  el.innerHTML=`${mk?`<div class="mk">${mk}</div>`:''}<section><h2>${prem?`점수 상위 ${items.length}종목`:`점수 상위 100종목 중 무작위 ${items.length}종목 · 가나다순`}</h2><div class="note">${fmtd(d.as_of)} 종가 기준${d.final===false?' · 잠정안(전일 야간 산출)':''}${live?` · 시세 ${d.q_at.slice(11,19)}${d.closed?' 종가':''}${stale?' <span class="neg">갱신 지연</span>':''}${avg}`:(wait?' · 시세 수신 대기':'')}</div><div class="tw"><table class="lv">${head}${items.map(row).join('')}</table></div></section><button class="lockout" onclick="lockout('${t}')">잠금</button>`;
+  el.innerHTML=`${mk?`<div class="mk">${mk}</div>`:''}<section><h2>${prem?`점수 상위 ${items.length}종목`:`점수 상위 100종목 중 무작위 ${items.length}종목 · 가나다순`}</h2><div class="note">${fmtd(d.as_of)} 종가 기준${d.final===false?' · 잠정안(전일 야간 산출)':''}${live?` · 시세 ${d.q_at.slice(11,19)}${d.closed?' 종가':''}${stale?' <span style="color:#e0b64d">갱신 지연</span>':''}${avg}`:(wait?' · 시세 수신 대기':'')}</div><div class="tw"><table class="lv">${head}${items.map(row).join('')}</table></div></section><button class="lockout" onclick="lockout('${t}')">잠금</button>`;
   header();
 }
 function header(){
