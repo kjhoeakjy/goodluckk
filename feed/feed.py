@@ -465,7 +465,9 @@ class Feed:
         pf = perf_doc(src)
         for k in ("b", "p"):
             write(f"cur/perf.{k}.json.enc", enc(pf, self.pw[k]))
-        write("cur/detail.p.json.enc", enc(detail_doc(src, [it["code"] for it in self.lists["p"]["items"]]), self.pw["p"]))
+        dd = detail_doc(src, [it["code"] for it in self.lists["p"]["items"]])
+        self.detail_n = len(dd["items"])
+        write("cur/detail.p.json.enc", enc(dd, self.pw["p"]))
         self.static_ok = True
         self._sig = None  # 다음 기록 때 함께 올라가도록
 
@@ -499,6 +501,13 @@ class Feed:
         if sig == getattr(self, "_sig", None):
             return  # 바뀐 내용 없음 → 기록 생략
         self._sig = sig
+        # 점검용 상태(건수·시각만 기록, 종목 정보 없음)
+        b = docs["b"]
+        write("cur/status.json", json.dumps({
+            "at": now().strftime("%Y-%m-%d %H:%M:%S"), "target_date": b.get("target_date"), "gen": b.get("gen"),
+            "final": b.get("final"), "rr": b.get("rr"), "plan_n": len(self.plan), "basic_n": len(b["items"]),
+            "premium_n": len(docs["p"]["items"]), "detail_n": getattr(self, "detail_n", None),
+            "quotes_n": len(self.quotes), "q_at": self.qat, "closed": self.closed}))
         k = int(time.time() // 10)
         for t in ("b", "p"):
             text = enc(docs[t], self.pw[t])
