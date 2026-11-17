@@ -577,11 +577,11 @@ def run(loop: bool) -> int:
         if time.time() - t0 > MAX_RUN:
             print("[run] 작업 시간 한도 · 다음 실행에 인계")
             return HANDOVER
-        if t > op + dt.timedelta(minutes=30) and not today_list:
+        if t > op + dt.timedelta(hours=3) and not today_list:  # 원본 발행 지연 대비: 개장 3시간 후까지 대기
             print("[run] 오늘 목록 없음(휴장일 등) · 종료")
             return 0
         # 원본 자료 확인: 장 시작 전 3분, 장중 20분 간격
-        if time.time() - last_src > (180 if t < op else 1200):
+        if time.time() - last_src > (180 if (t < op or not today_list) else 1200):
             try:
                 f.refresh_source()
             except Exception as e:  # noqa: BLE001
