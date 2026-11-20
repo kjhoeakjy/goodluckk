@@ -388,11 +388,16 @@ def push(msg: str) -> None:
     print("[push] 실패")
 
 
+def plain(obj) -> str:
+    """공개 자료(비밀번호 없음)용 JSON."""
+    return json.dumps(_finite(obj), ensure_ascii=False, allow_nan=False, separators=(",", ":"))
+
+
 def prune_slots() -> None:
     d = OUT / "t"
     if not d.exists():
         return
-    ks = sorted({int(p.name.split(".")[0]) for p in d.glob("*.enc") if p.name.split(".")[0].isdigit()})
+    ks = sorted({int(p.name.split(".")[0]) for p in d.glob("*.json*") if p.name.split(".")[0].isdigit()})
     for k in ks[:-SLOTS_KEEP]:
         for p in d.glob(f"{k}.*"):
             p.unlink()
@@ -484,6 +489,7 @@ class Feed:
         pf = perf_doc(src)
         for k in ("b", "p"):
             write(f"cur/perf.{k}.json.enc", enc(pf, self.pw[k]))
+        write("cur/perf.json", plain(pf))  # 전체 공개 화면용
         codes = [it["code"] for it in self.lists["p"]["items"]]
         if any(c not in {u.get("code") for u in src.get("up") or []} for c in codes):
             if self.extra is None or self.extra.get("target_date") != src.get("target_date"):
@@ -491,6 +497,7 @@ class Feed:
         dd = detail_doc(src, codes, self.extra)
         self.detail_n = len(dd["items"])
         write("cur/detail.p.json.enc", enc(dd, self.pw["p"]))
+        write("cur/detail.json", plain(dd))
         self.static_ok = True
         self._sig = None  # 다음 기록 때 함께 올라가도록
 
@@ -537,6 +544,10 @@ class Feed:
             write(f"cur/{t}.json.enc", text)
             if slot:
                 write(f"t/{k}.{t}.json.enc", text)
+        pub = plain(docs["p"])  # 전체 공개 화면용(순위 상위 목록)
+        write("cur/pub.json", pub)
+        if slot:
+            write(f"t/{k}.pub.json", pub)
         prune_slots()
         push(f"feed {now().strftime('%m%d %H%M%S')}")
 
