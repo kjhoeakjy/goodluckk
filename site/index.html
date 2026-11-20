@@ -282,7 +282,7 @@ function detailHtml(x){
   const g=it.groups||{}, tg=[...(g.industry||[]).map(v=>`<span>업종 ${esc(v)}</span>`),...(g.themes||[]).map(v=>`<span>${esc(v)}</span>`)].join('');
   const L=it.llm, llm=L&&L.verdict?`<div><span class="${L.verdict==='호재'?'pos':L.verdict==='악재'?'neg':''}">${esc(L.verdict)}</span> · ${L.event&&L.event!=='없음'?esc(L.event)+' · ':''}${esc(L.note)}</div>`:'';
   const nt=t=>{t=String(t||'');return t.length>=12?`${t.slice(4,6)}.${t.slice(6,8)} ${t.slice(8,10)}:${t.slice(10,12)}`:esc(t);};
-  const ev=[...(it.disc||[]).map(v=>`<div>공시 ${esc(v.t)} · ${esc(v.title)}</div>`),...(it.news||[]).map(v=>`<div>뉴스 ${nt(v.t)} · ${/^https:\/\//.test(v.url||'')?`<a href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">${esc(v.title)}</a>`:esc(v.title)}</div>`)].join('');
+  const ev=[...(it.disc||[]).map(v=>`<div>공시 ${esc(String(v.t||'').replace('T',' '))} · ${esc(v.title)}</div>`),...(it.news||[]).map(v=>`<div>뉴스 ${nt(v.t)} · ${/^https:\/\//.test(v.url||'')?`<a href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">${esc(v.title)}</a>`:esc(v.title)}</div>`)].join('');
   const wrap=v=>v?`<div class="tw cw">${v}</div>`:'', ch=wrap(candle(it))+wrap(flowsSvg(it.chart));
   return `<div class="dtb">${rs?`<h4>추천 근거</h4><ul class="rs">${rs}</ul><div class="ev" style="margin-top:4px">▲ 점수 상승 요인 · ▼ 점수 하락 요인</div>`:''}${tg?`<h4>업종·테마</h4><div class="tg">${tg}</div>`:''}${ch?`<h4>일별 주가·투자자별 순매수(전일 기준)</h4>${ch}`:''}${llm||ev?`<h4>공시·뉴스</h4><div class="evl">${llm}${ev}</div>`:''}${rs||tg||ch||llm||ev?'':'<span class="ev">상세 자료 미제공</span>'}</div>`;
 }
