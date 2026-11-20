@@ -67,15 +67,6 @@ th.l{text-align:left}
 .evl div{padding:2px 0;color:var(--mut)}
 .evl a{color:#b7bcc6;text-decoration:none}
 .evl a:hover{text-decoration:underline}
-.lock{max-width:300px;margin:28px 0;display:flex;flex-direction:column;gap:9px}
-.lock input[type=password]{font-size:16px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);width:100%;font-family:inherit}
-.lock input:focus{outline:none;border-color:#3a414d}
-.lock button{font-size:14px;padding:10px;border-radius:8px;border:0;background:var(--fg);color:var(--bg);cursor:pointer;font-weight:600;font-family:inherit}
-.lock label{color:var(--mut);font-size:12px}
-.lock .err{color:var(--up);font-size:12px;min-height:16px}
-.lock .t{font-size:13px;color:var(--mut)}
-.lockout{font-size:11.5px;color:var(--dim);margin-top:14px;cursor:pointer;background:none;border:0;padding:0;font-family:inherit}
-.lockout:hover{color:var(--mut)}
 .ev{color:var(--mut);font-size:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:16px}
 .kv{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 12px 10px}
@@ -112,10 +103,9 @@ th.l{text-align:left}
 <body>
 <div class="wrap">
   <div class="hdr"><h1 id="title">GOODLUCK</h1><span class="sub" id="sub"></span><span class="badge" id="st" hidden></span></div>
-  <div class="tabs top" id="tabs"><button data-v="b" class="on">일반</button><button data-v="p">프리미엄</button><button data-v="perf">성능</button><button data-v="plan">요금제</button><button data-v="info">안내</button></div>
+  <div class="tabs top" id="tabs"><button data-v="p" class="on">추천</button><button data-v="perf">성능</button><button data-v="info">설명서</button></div>
 
-  <div class="view on" id="v-b"></div>
-  <div class="view" id="v-p"></div>
+  <div class="view on" id="v-p"></div>
   <div class="view" id="v-perf">
     <div id="perf-lock"></div>
     <div id="perf-body" hidden>
@@ -135,40 +125,36 @@ th.l{text-align:left}
     </div>
   </div>
 
-  <div class="view" id="v-plan">
+  <div class="view" id="v-info">
     <section>
       <h2>페이지 소개</h2>
-      <div class="note" style="margin:0">거래일 개장 전 당일 상승 가능성이 높은 국내 주식을 선정하여 제시. 장중 추천 종목의 현재가를 30초 간격으로 갱신. 매수·매도 시점과 수량은 제시하지 않음. 투자 여부는 이용자가 판단.</div>
-    </section>
-    <section>
-      <h2>요금제</h2>
-      <div class="tw"><table class="plan">
-        <tr><th></th><th>일반</th><th>프리미엄</th></tr>
-        <tr><td>종목 수</td><td>20</td><td>40</td></tr>
-        <tr><td>선정 방식</td><td>순위 상위 100종목 중 무작위</td><td>순위 상위 40종목</td></tr>
-        <tr><td>순위 표시</td><td>미제공</td><td>제공</td></tr>
-        <tr><td>추천 근거·차트</td><td>미제공</td><td>제공</td></tr>
-        <tr><td>장중 현재가</td><td>제공</td><td>제공</td></tr>
-        <tr><td>성능 탭</td><td>제공</td><td>제공</td></tr>
-      </table></div>
-      <div class="ev" style="margin-top:12px">비밀번호는 요금제별로 구분. 일반 목록은 당일 유지하며 순위 상위 100종목에서 제외된 종목은 교체.</div>
+      <div class="note" style="margin:0">거래일 개장 전 당일 상승 가능성이 높은 국내 주식 40종목을 순위와 함께 제시. 장중 추천 종목의 현재가를 30초 간격으로 갱신. 매수·매도 시점과 수량은 제시하지 않음. 투자 여부는 이용자가 판단.</div>
     </section>
     <section>
       <h2>이용 방법</h2>
       <div class="cards">
-        <div class="c"><b>07:45 이후</b><span>당일 추천 목록 확인</span></div>
+        <div class="c"><b>07:45 이후</b><span>추천 탭에서 당일 추천 목록 확인</span></div>
         <div class="c"><b>08:58 이후</b><span>최종 순위 확인</span></div>
         <div class="c"><b>09:00~15:30</b><span>현재가·등락률 확인</span></div>
+        <div class="c"><b>종목 선택</b><span>추천 근거, 일별 주가, 공시·뉴스 확인</span></div>
         <div class="c"><b>성능 탭</b><span>과거 검증 결과와 최근 실전 결과 확인</span></div>
       </div>
+    </section>
+    <section>
+      <h2>화면 항목</h2>
+      <div class="tw"><table class="plan">
+        <tr><th>항목</th><th>의미</th></tr>
+        <tr><td>순위</td><td>당일 추천 순위. 08:58 재선정 후 확정</td></tr>
+        <tr><td>등락률</td><td>전일 종가 대비 현재가 변동률</td></tr>
+        <tr><td>시가 대비</td><td>당일 시가 대비 현재가 변동률</td></tr>
+        <tr><td>고가 등락률</td><td>전일 종가 대비 당일 고가 변동률</td></tr>
+        <tr><td>▲ · ▼</td><td>추천 근거 중 점수 상승 요인 · 하락 요인</td></tr>
+      </table></div>
     </section>
     <section>
       <h2>유의 사항</h2>
       <div class="note" style="margin:0">추천은 과거 자료로 학습한 모형의 산출 결과이며 수익을 보장하지 않음. 추천 종목은 변동성이 높아 손실 위험이 큼. 성능 탭의 수치는 과거 검증 결과이며 실제 매매 결과와 상이할 수 있음.</div>
     </section>
-  </div>
-
-  <div class="view" id="v-info">
     <section>
       <h2>활용 자료</h2>
       <div class="cards">
@@ -188,7 +174,7 @@ th.l{text-align:left}
         <div class="n"><div class="t">전일 16:00</div><div class="h">전일 자료 확정</div><div class="d">일별 주가·투자자별 매매·업종 자료 마감</div></div>
         <div class="n k"><div class="t">07:20</div><div class="h">자료 수집</div><div class="d">공시·뉴스·토론방·해외 지표 수집</div></div>
         <div class="n k"><div class="t">07:30</div><div class="h">학습·점수 산출</div><div class="d">모형 재학습 후 전 종목 점수 산출</div></div>
-        <div class="n k"><div class="t">07:45</div><div class="h">오전 순위 발행</div><div class="d">점수 순위 기준 일반·프리미엄 목록 갱신</div></div>
+        <div class="n k"><div class="t">07:45</div><div class="h">오전 순위 발행</div><div class="d">점수 순위 기준 추천 목록 갱신</div></div>
         <div class="n k"><div class="t">08:58</div><div class="h">순위 재선정</div><div class="d">개장 직전 예상 시가를 반영한 재선정 순위를 상위에 배치</div></div>
         <div class="n"><div class="t">09:00</div><div class="h">장중 시세</div><div class="d">30초 간격 현재가 갱신(15:30 종료)</div></div>
         <div class="n"><div class="t">익일</div><div class="h">결과 집계</div><div class="d">전일 추천 결과를 성능 탭에 반영</div></div>
@@ -202,7 +188,7 @@ th.l{text-align:left}
         <tr><td>08:58 이전</td><td>오전 순위(전일 종가 기준 점수 순)</td></tr>
         <tr><td>08:58 이후</td><td>재선정 순위(최대 10종목) 우선, 이후 순위는 오전 순위 유지</td></tr>
       </table></div>
-      <div class="ev" style="margin-top:10px">재선정 순위는 개장 직전 예상 시가를 반영한 순위. 일반 목록은 재선정 후에도 순위 상위 100종목에 포함된 종목을 유지.</div>
+      <div class="ev" style="margin-top:10px">재선정 순위는 개장 직전 예상 시가를 반영한 순위.</div>
     </section>
     <section>
       <h2>상태 표시</h2>
@@ -221,9 +207,8 @@ th.l{text-align:left}
         <div class="r"><div class="l">상장 주식 전체</div><div class="bar" style="width:100%"></div><div class="v">2,770</div></div>
         <div class="r"><div class="l">거래 가능 보통주</div><div class="bar" style="width:62%"></div><div class="v">≈1,700</div></div>
         <div class="r"><div class="l">관리종목·투자경고 이상 제외</div><div class="bar" style="width:60%"></div><div class="v">≈1,670</div></div>
-        <div class="r k"><div class="l">순위 상위</div><div class="bar" style="width:4%;min-width:12px"></div><div class="v">100</div></div>
-        <div class="r k"><div class="l">프리미엄(순위 공개)</div><div class="bar" style="width:2%;min-width:8px"></div><div class="v">40</div></div>
-        <div class="r k"><div class="l">일반(무작위)</div><div class="bar" style="width:1%;min-width:6px"></div><div class="v">20</div></div>
+        <div class="r k"><div class="l">재선정 대상</div><div class="bar" style="width:4%;min-width:12px"></div><div class="v">100</div></div>
+        <div class="r k"><div class="l">추천 목록</div><div class="bar" style="width:2%;min-width:8px"></div><div class="v">40</div></div>
       </div>
     </section>
   </div>
@@ -233,11 +218,9 @@ th.l{text-align:left}
 <script>
 'use strict';
 const REPO='kjhoeakjy/goodluckk', RAW=`https://raw.githubusercontent.com/${REPO}/live/`;
-const TIERS={b:{name:'일반'},p:{name:'프리미엄'}};
-const KEYS={}, DOCS={}, PERF={};
-let VIEW='b', HZ=12, POLL=null, PDOC=null;
+const DOCS={};
+let VIEW='p', HZ=12, POLL=null, PDOC=null;
 const $=i=>document.getElementById(i);
-const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const sgn=v=>v==null?'-':(v>0?'+':'')+(v*100).toFixed(2)+'%';
 const pct=(v,d=1)=>(v*100).toFixed(d)+'%';
 const cls=v=>v>0?'pos':v<0?'neg':'';
@@ -247,56 +230,24 @@ const pf=v=>v<0.01?(v*100).toFixed(2)+'%':v<0.1?(v*100).toFixed(1)+'%':(v*100).t
 const kst=()=>new Date(Date.now()+9*3600e3);
 const fmtd=s=>`${s.slice(4,6)}.${s.slice(6,8)}`;
 const DOW='일월화수목금토';
-const store={get(k){try{return sessionStorage.getItem(k)||localStorage.getItem(k)||'';}catch(e){return '';}},
-  set(k,v,keep){try{(keep?localStorage:sessionStorage).setItem(k,v);}catch(e){}},
-  del(k){try{sessionStorage.removeItem(k);localStorage.removeItem(k);}catch(e){}}};
 
-// ---- 복호화: 비밀번호 → PBKDF2 → AES-GCM
-async function derive(pw,e){const te=new TextEncoder(),base=await crypto.subtle.importKey('raw',te.encode(pw),'PBKDF2',false,['deriveKey']);
-  return crypto.subtle.deriveKey({name:'PBKDF2',salt:te.encode(e.salt),iterations:e.iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);}
-async function open_(key,e){const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(e.iv)},key,b64(e.ct));return JSON.parse(new TextDecoder().decode(pt));}
-async function fetchEnc(path){const c=new AbortController(),tm=setTimeout(()=>c.abort(),10000);try{const r=await fetch(RAW+path,{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json();}finally{clearTimeout(tm);}}
+// ---- 자료 수신(공개 자료)
+async function fetchJson(path){const c=new AbortController(),tm=setTimeout(()=>c.abort(),10000);try{const r=await fetch(RAW+path,{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json();}finally{clearTimeout(tm);}}
 // 장중: 10초 단위 슬롯 파일(새 주소라 CDN 캐시 없음) 중 가장 최근 것, 없으면 고정 파일(최대 5분 캐시)
-const SLOT_LAST={b:0,p:0};
-async function getDoc(t){
+let SLOT_LAST=0;
+async function getDoc(){
   const top=Math.floor((Date.now()/1000-20)/10), tries=[];
-  if(inSession())for(let k=top;k>top-9&&k>SLOT_LAST[t];k--)tries.push(k);
-  for(const k of tries){try{const e=await fetchEnc(`t/${k}.${t}.json.enc`);SLOT_LAST[t]=k;return e;}catch(x){}}
-  return fetchEnc(`cur/${t}.json.enc`);
+  if(inSession())for(let k=top;k>top-9&&k>SLOT_LAST;k--)tries.push(k);
+  for(const k of tries){try{const e=await fetchJson(`t/${k}.pub.json`);SLOT_LAST=k;return e;}catch(x){}}
+  return fetchJson('cur/pub.json');
 }
 function inSession(){const x=kst(),d=x.getUTCDay(),m=x.getUTCHours()*60+x.getUTCMinutes(),sh=shift(x);return d>=1&&d<=5&&m>=540+sh&&m<=935+sh;}
 function shift(x){return {'20261119':60}[x.toISOString().slice(0,10).replace(/-/g,'')]||0;}
 
-// ---- 잠금 화면
-// 비밀번호 오류 누적 10회 시 해당 기기 접속 차단(성공 시 초기화)
-const FAIL_MAX=10; let FAILM=0;
-function fails(){try{return Math.max(FAILM,+(localStorage.getItem('glk_fail')||0)||0);}catch(e){return FAILM;}}
-function setFails(n){FAILM=n;try{if(n)localStorage.setItem('glk_fail',n);else localStorage.removeItem('glk_fail');}catch(e){}}
-function blocked(){return fails()>=FAIL_MAX;}
-function blockAll(){for(const t of ['b','p']){delete KEYS[t];delete DOCS[t];store.del('glk_'+t);}PD=null;PDS='';OPEN.clear();PDOC=null;
-  const m='<div class="lock"><div class="t">접속 차단</div><div class="err">비밀번호 '+FAIL_MAX+'회 오류</div></div>';
-  $('v-b').innerHTML=m;$('v-p').innerHTML=m;$('perf-lock').innerHTML=m;$('perf-lock').hidden=false;$('perf-body').hidden=true;}
-function lockForm(el,label,onpw){
-  if(blocked()){blockAll();return;}
-  el.innerHTML=`<form class="lock" autocomplete="off"><div class="t">${label}</div><input type="password" placeholder="비밀번호"><label><input type="checkbox"> 비밀번호 기기 저장</label><button type="submit">확인</button><div class="err"></div></form>`;
-  const f=el.querySelector('form'),inp=f.querySelector('input[type=password]'),err=f.querySelector('.err');
-  f.onsubmit=async ev=>{ev.preventDefault();err.textContent='확인 중';const ok=await onpw(inp.value,f.querySelector('input[type=checkbox]').checked);
-    if(ok==='net')err.textContent='자료 수신 실패';else if(!ok){const n=fails()+1;setFails(n);if(n>=FAIL_MAX){blockAll();return;}err.textContent=`비밀번호 불일치(${n}/${FAIL_MAX})`;inp.value='';inp.focus();}else setFails(0);};
-  setTimeout(()=>inp.focus(),0);
-}
-async function unlock(t,pw,keep){
-  if(blocked())return false;
-  let e;try{e=await getDoc(t);}catch(x){return 'net';}
-  try{const k=await derive(pw,e);DOCS[t]=await open_(k,e);KEYS[t]=k;}catch(x){return false;}
-  if(pw)store.set('glk_'+t,pw,keep);
-  render(t);return true;
-}
-function lockout(t){if(t==='p'){PD=null;PDS='';OPEN.clear();}delete KEYS[t];delete DOCS[t];store.del('glk_'+t);show(t);}
-
 // ---- 목록
 function render(t){
   const el=$('v-'+t), d=DOCS[t];
-  if(!d){lockForm(el,`${TIERS[t].name} 비밀번호`,(pw,keep)=>unlock(t,pw,keep));return;}
+  if(!d){el.innerHTML='<div class="ev" style="margin:24px 0">자료 수신 실패 · 잠시 후 자동 재시도</div>';return;}
   const live=!!(d.q_at&&d.q_at.slice(0,10).replace(/-/g,'')===d.target_date);
   const prem=t==='p';
   const head=`<tr>${prem?'<th></th>':''}<th class="l">종목</th><th>${live?'현재가':'전일 종가'}</th><th>${live?'등락률':'전일 등락률'}</th>${live?'<th>시가 대비</th><th class="hm">고가 등락률</th>':''}${live?'<th class="hm">거래대금</th>':''}</tr>`;
@@ -308,16 +259,16 @@ function render(t){
   let avg='';
   if(live){const rs=items.map(x=>x.ret).filter(v=>v!=null);if(rs.length){const a=rs.reduce((s,v)=>s+v,0)/rs.length,nl=items.filter(x=>x.lim).length;avg=` · 평균 등락률 <span class="${cls(a)}">${sgn(a)}</span>${nl?` · 상한가 ${nl}`:''}`;}}
   const idx=d.index||{}, mk=live?['KOSPI','KOSDAQ'].filter(k=>idx[k]!=null).map(k=>`<div><b>${k==='KOSPI'?'코스피':'코스닥'}</b><span class="${cls(idx[k])}">${sgn(idx[k])}</span></div>`).join(''):'';
-  el.innerHTML=`${mk?`<div class="mk">${mk}</div>`:''}<section><h2>${prem?`순위 상위 ${items.length}종목 · 종목 선택 시 추천 근거·차트 표시`:`순위 상위 100종목 중 무작위 ${items.length}종목 · 가나다순`}</h2><div class="note">${fmtd(d.as_of)} 종가 기준${d.final===false?' · 잠정안(전일 야간 산출)':''}${live?` · 시세 기준 ${d.q_at.slice(11,19)}${d.closed?'(종가)':''}${stale?' <span style="color:#e0b64d">갱신 지연</span>':''}${avg}`:(wait?' · 시세 수신 대기':'')}</div><div class="tw"><table class="lv">${head}${items.map(row).join('')}</table></div>${live?'<div class="ev" style="margin-top:8px">등락률<span class=\"hm\">·고가 등락률</span>: 전일 종가 대비 · 시가 대비: 당일 시가 대비 현재가</div>':''}</section><button class="lockout" onclick="lockout('${t}')">화면 잠금</button>`;
+  el.innerHTML=`${mk?`<div class="mk">${mk}</div>`:''}<section><h2>${prem?`추천 ${items.length}종목 · 종목 선택 시 추천 근거·차트 표시`:`순위 상위 100종목 중 무작위 ${items.length}종목 · 가나다순`}</h2><div class="note">${fmtd(d.as_of)} 종가 기준${d.final===false?' · 잠정안(전일 야간 산출)':''}${live?` · 시세 기준 ${d.q_at.slice(11,19)}${d.closed?'(종가)':''}${stale?' <span style="color:#e0b64d">갱신 지연</span>':''}${avg}`:(wait?' · 시세 수신 대기':'')}</div><div class="tw"><table class="lv">${head}${items.map(row).join('')}</table></div>${live?'<div class="ev" style="margin-top:8px">등락률<span class=\"hm\">·고가 등락률</span>: 전일 종가 대비 · 시가 대비: 당일 시가 대비 현재가</div>':''}</section>`;
   if(prem){el.querySelectorAll('tr.cl').forEach(tr=>tr.onclick=()=>toggle(tr.dataset.c));el.querySelectorAll('.cw').forEach(w=>{w.scrollLeft=w.scrollWidth;});}
   header();
 }
-// ---- 프리미엄 종목 상세(추천 근거·차트·공시·뉴스)
+// ---- 종목 상세(추천 근거·차트·공시·뉴스)
 const OPEN=new Set(); let PD=null, PDS='';
 const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function loadDetail(){
   if(PDS==='load')return; PDS='load';
-  try{const e=await fetchEnc('cur/detail.p.json.enc');PD=await open_(KEYS.p,e);PDS='ok';}catch(x){PDS='fail';}
+  try{PD=await fetchJson('cur/detail.json');PDS='ok';}catch(x){PDS='fail';}
   if(VIEW==='p'&&DOCS.p)render('p');
 }
 function toggle(c){if(OPEN.has(c))OPEN.delete(c);else{OPEN.add(c);const d=DOCS.p;if(!PD||PDS==='fail'||(d&&PD.target_date!==d.target_date))loadDetail();}render('p');}
@@ -367,7 +318,7 @@ function flowsSvg(c){
 }
 // 상태 표시: 재선정 완료 / 오전 순위 확정 / 산정 중 / 잠정안 / 종료
 function header(){
-  const d=DOCS[VIEW]||DOCS.p||DOCS.b; if(!d){$('sub').textContent='';$('st').hidden=true;return;}
+  const d=DOCS.p; if(!d){$('sub').textContent='';$('st').hidden=true;return;}
   const td=d.target_date, dt=new Date(Date.UTC(+td.slice(0,4),+td.slice(4,6)-1,+td.slice(6,8)));
   $('sub').textContent=`${td.slice(0,4)}.${fmtd(td)} ${DOW[dt.getUTCDay()]} 추천`;
   const x=kst(), today=x.toISOString().slice(0,10).replace(/-/g,''), st=$('st'), sh=shift(x);
@@ -391,20 +342,17 @@ function header(){
   st.textContent=txt; st.className='badge'+(c?' '+c:''); st.hidden=false;
 }
 async function refresh(){
-  for(const t of ['b','p']){if(!KEYS[t]||(VIEW!==t))continue;try{const e=await getDoc(t);DOCS[t]=await open_(KEYS[t],e);}catch(x){}if(t==='p'&&PD&&DOCS.p&&PD.gen!==DOCS.p.gen&&PDS!=='load')loadDetail();if(DOCS[t]&&VIEW===t)render(t);}
+  if(VIEW!=='p')return;
+  try{DOCS.p=await getDoc();}catch(x){}
+  if(PD&&DOCS.p&&PD.gen!==DOCS.p.gen&&PDS!=='load')loadDetail();
+  if(VIEW==='p')render('p');
 }
 function startPoll(){if(POLL)return;POLL=setInterval(()=>{const x=kst(),d=x.getUTCDay(),m=x.getUTCHours()*60+x.getUTCMinutes();if(d>=1&&d<=5&&m>=430&&m<=950+shift(x))refresh();},30000);}
 
 // ---- 성능
-async function perfUnlock(pw,keep){
-  let net=0;
-  for(const t of ['p','b']){let e;try{e=await fetchEnc(`cur/perf.${t}.json.enc`);}catch(x){net++;continue;}
-    try{const k=KEYS[t]&&!pw?KEYS[t]:await derive(pw,e);PDOC=await open_(k,e);if(pw){KEYS[t]=KEYS[t]||k;store.set('glk_'+t,pw,keep);}showPerf();return true;}catch(x){}}
-  return net===2?'net':false;
-}
 async function showPerf(){
-  if(!PDOC){for(const t of ['p','b'])if(KEYS[t]&&(await perfUnlock('',false))===true)return;
-    $('perf-body').hidden=true;lockForm($('perf-lock'),'일반 또는 프리미엄 비밀번호',perfUnlock);return;}
+  if(!PDOC){$('perf-body').hidden=true;$('perf-lock').innerHTML='<div class="ev" style="margin:24px 0">자료 수신 중</div>';
+    try{PDOC=await fetchJson('cur/perf.json');}catch(x){$('perf-lock').innerHTML='<div class="ev" style="margin:24px 0">자료 수신 실패</div>';return;}}
   $('perf-lock').innerHTML='';$('perf-body').hidden=false;stats(PDOC);
 }
 const kv=(b,s,d)=>`<div class="kv"><b>${b}</b><span>${s}</span>${d?`<small>${d}</small>`:''}</div>`;
@@ -501,13 +449,13 @@ async function show(v){
   document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
   try{localStorage.setItem('glk_view',v);}catch(e){}
-  if(v==='b'||v==='p'){if(!DOCS[v]){const pw=store.get('glk_'+v);$('v-'+v).innerHTML='<div class="ev" style="margin:24px 0">자료 수신 중</div>';let keep=false;try{keep=!!localStorage.getItem('glk_'+v);}catch(e){}const r=pw?await unlock(v,pw,keep):false;if(VIEW===v&&r!==true){render(v);if(r==='net'){const er=$('v-'+v).querySelector('.err');if(er)er.textContent='자료 수신 실패';}}}else{render(v);refresh();}}
+  if(v==='p'){if(!DOCS.p){$('v-p').innerHTML='<div class="ev" style="margin:24px 0">자료 수신 중</div>';await refresh();}else{render('p');refresh();}}
   else if(v==='perf')showPerf();
   header();
 }
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>show(b.dataset.v));
-let v0='b';try{v0=localStorage.getItem('glk_view')||'b';}catch(e){}
-show(['b','p','perf','plan','info'].includes(v0)?v0:'b');
+let v0='p';try{v0=localStorage.getItem('glk_view')||'p';}catch(e){}
+show(['p','perf','info'].includes(v0)?v0:'p');
 startPoll();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
 </script>

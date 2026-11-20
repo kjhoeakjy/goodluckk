@@ -2,4 +2,4 @@
 
 화면: https://kjhoeakjy.github.io/goodluckk/
 
-추천 자료는 AES-256-GCM으로 암호화되어 있으며 비밀번호 없이는 읽을 수 없음.
+추천 목록·성능·종목 상세는 공개 자료로 발행됨.
