@@ -144,7 +144,7 @@ th.l{text-align:left}
       <h2>화면 항목</h2>
       <div class="tw"><table class="plan">
         <tr><th>항목</th><th>의미</th></tr>
-        <tr><td>순위</td><td>당일 추천 순위. 08:58 재선정 후 확정</td></tr>
+        <tr><td>순위</td><td>당일 추천 순위</td></tr>
         <tr><td>등락률</td><td>전일 종가 대비 현재가 변동률</td></tr>
         <tr><td>시가 대비</td><td>당일 시가 대비 현재가 변동률</td></tr>
         <tr><td>고가 등락률</td><td>전일 종가 대비 당일 고가 변동률</td></tr>
@@ -189,6 +189,7 @@ th.l{text-align:left}
         <tr><td>08:58 이후</td><td>재선정 순위(최대 10종목) 우선, 이후 순위는 오전 순위 유지</td></tr>
       </table></div>
       <div class="ev" style="margin-top:10px">재선정 순위는 개장 직전 예상 시가를 반영한 순위.</div>
+      <div class="ev" id="rrp" style="margin-top:6px;color:#e0b64d" hidden>08:58 재선정은 현재 일시 중단. 중단 기간의 순위는 오전 순위 기준.</div>
     </section>
     <section>
       <h2>상태 표시</h2>
@@ -316,6 +317,8 @@ function flowsSvg(c){
   s+=`<text x="${W-pad.r+6}" y="${pad.t+6}" fill="#8b919c" font-size="12">+${m.toFixed(0)}억</text><text x="${W-pad.r+6}" y="${H-14}" fill="#8b919c" font-size="12">−${m.toFixed(0)}억</text><text x="${W-pad.r}" y="${H-2}" fill="#8b919c" font-size="12" text-anchor="end">${n}일 순매수(억 원)</text>`;
   return s+'</svg>';
 }
+// 재선정 일시 중단 여부(원본의 재선정 순위 기록이 재개되면 false)
+const RR_PAUSED=true;
 // 상태 표시: 재선정 완료 / 오전 순위 확정 / 산정 중 / 잠정안 / 종료
 function header(){
   const d=DOCS.p; if(!d){$('sub').textContent='';$('st').hidden=true;return;}
@@ -329,7 +332,8 @@ function header(){
   let txt, c='';
   if(td===today&&d.rr){txt='재선정 완료 · 최종 순위';c='final';}
   else if(td===today&&d.final!==false){
-    if(wk&&hm<538+sh){txt=`오전 순위 확정 · ${tm(538+sh)} 재선정 예정`;c='final';}
+    if(RR_PAUSED){txt='최종 순위 · 오전 순위 기준';c='final';}
+    else if(wk&&hm<538+sh){txt=`오전 순위 확정 · ${tm(538+sh)} 재선정 예정`;c='final';}
     else if(wk&&hm<545+sh){txt='재선정 순위 산정 중';c='live';}
     else{txt='최종 순위 · 오전 순위 기준';c='final';}
   }
@@ -454,6 +458,7 @@ async function show(v){
   header();
 }
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+if(RR_PAUSED)$('rrp').hidden=false;
 let v0='p';try{v0=localStorage.getItem('glk_view')||'p';}catch(e){}
 show(['p','perf','info'].includes(v0)?v0:'p');
 startPoll();
